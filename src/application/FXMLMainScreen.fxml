@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXMLMainScreenController">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="Documento">
+          <items>
+            <MenuItem mnemonicParsing="false" onAction="#openDirectory" text="Abrir Pasta" />
+            <MenuItem mnemonicParsing="false" onAction="#removeWhiteSheet" text="Remover Brancas" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Ajuda">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Documentação" />
+                  <MenuItem mnemonicParsing="false" text="Sobre" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+      <SplitPane dividerPositions="0.6" prefHeight="375.0" prefWidth="640.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="208.0">
+               <children>
+                  <ImageView fx:id="imageView" fitHeight="294.0" fitWidth="244.0" layoutX="27.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="346.0">
+               <children>
+                  <DatePicker layoutX="14.0" layoutY="41.0" prefHeight="25.0" prefWidth="145.0" promptText="Data" />
+                  <TextField layoutX="14.0" layoutY="78.0" promptText="Portaria / E-DOC" />
+                  <SplitMenuButton layoutX="14.0" layoutY="113.0" mnemonicParsing="false" text="Tipo do documento">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </SplitMenuButton>
+                  <ChoiceBox layoutX="14.0" layoutY="149.0" prefWidth="150.0" />
+                  <Button layoutX="14.0" layoutY="325.0" mnemonicParsing="false" onAction="#organize" prefHeight="25.0" prefWidth="150.0" text="Organizar" />
+                  <Label layoutX="14.0" layoutY="10.0" text="Pasta:" />
+                  <Label layoutX="51.0" layoutY="10.0" text="..." />
+                  <ProgressBar layoutX="14.0" layoutY="283.0" prefHeight="18.0" prefWidth="162.0" progress="0.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+  </children>
+</VBox>
