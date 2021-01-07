@@ -1,9 +1,9 @@
 package application;
 
+import java.awt.Button;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +14,8 @@ import organize_files.OpenDirectory;
 public class FXMLMainScreenController implements Initializable {
 
 	public File directory;
+	OpenDirectory openDirectory = new OpenDirectory();
+	private int IndexImage = 0;
 
 	@FXML
 	private ImageView imageView;
@@ -26,8 +28,9 @@ public class FXMLMainScreenController implements Initializable {
 
 	@FXML
 	private void openDirectory(ActionEvent event) {
-		OpenDirectory openDirectory = new OpenDirectory();
+		
 		directory = openDirectory.open();
+		imageView.setImage(openDirectory.openImage(IndexImage));
 	}
 
 	@FXML
@@ -39,6 +42,20 @@ public class FXMLMainScreenController implements Initializable {
 	private void organize(ActionEvent event) {
 		MoveFile moveFile = new MoveFile();
 		moveFile.MoveFiles(directory);
+	}
+	
+	@FXML
+	private void nextImage(ActionEvent event) {
+		IndexImage++;
+		imageView.setImage(openDirectory.openImage(IndexImage));
+	}
+	
+	@FXML
+	private void previousImage(ActionEvent event) {
+		if (IndexImage > 0) {
+			IndexImage--;
+			imageView.setImage(openDirectory.openImage(IndexImage));
+		}
 	}
 
 }
