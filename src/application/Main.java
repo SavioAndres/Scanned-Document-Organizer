@@ -19,7 +19,7 @@ public class Main extends Application {
 			Pane root = FXMLLoader.load(getClass().getResource("FXMLMainScreen.fxml"));
 	        Scene scene = new Scene(root);
 			
-			primaryStage.setTitle("Scanned Document Organizer");
+			primaryStage.setTitle("Organizador de documentos digitalizados");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {

@@ -3,7 +3,6 @@ package organize_files;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MoveFile {
@@ -19,7 +18,7 @@ public class MoveFile {
 					newDirectory.mkdir();
 				}
 				try {
-					Path temp = Files.move(Paths.get(directory.getAbsolutePath() + "\\" + files[i].getName()),
+					Files.move(Paths.get(directory.getAbsolutePath() + "\\" + files[i].getName()),
 							Paths.get(newDirectory.getAbsolutePath() + "\\" + files[i].getName()));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
