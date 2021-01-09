@@ -12,18 +12,16 @@ import application.FXMLMainScreenController;
 
 public class RemoveWhiteSheet {
 	
-	public void start() {
+	public void start() throws IOException {
 		File directory = FXMLMainScreenController.directory;
 		File[] files = directory.listFiles();
 		BufferedImage img = null;
 		
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].isFile()) {
-				try {
-					img = ImageIO.read(files[i]);
-					System.out.println(files[i].getName() + " : " + isWhitePage(img, 0.999));
-				} catch (IOException e) {
-				}
+				img = ImageIO.read(files[i]);
+				System.out.println(files[i].getName() + " : " + isWhitePage(img, 0.999));
+				
 			} 
 		}
 	}

@@ -3,11 +3,13 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.SplitPane?>
@@ -44,27 +46,34 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="208.0">
                      <children>
-                        <ImageView fx:id="imageView" fitHeight="545.0" fitWidth="596.0" layoutX="7.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                         <Button layoutX="404.0" layoutY="549.0" mnemonicParsing="false" onAction="#nextImage" text="&gt;" />
                         <Button fx:id="previousImage" layoutX="368.0" layoutY="549.0" mnemonicParsing="false" onAction="#previousImage" text="&lt;" />
-                        <Slider layoutX="94.0" layoutY="555.0" />
+                        <Slider fx:id="zoom" layoutX="94.0" layoutY="555.0" />
+                        <ScrollPane pannable="true" prefHeight="543.0" prefWidth="512.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <content>
+                              <ImageView fx:id="imageView" fitHeight="2300.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true" />
+                           </content>
+                        </ScrollPane>
                      </children>
                   </AnchorPane>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="373.0" prefWidth="346.0">
                      <children>
-                        <DatePicker layoutX="14.0" layoutY="41.0" prefHeight="25.0" prefWidth="145.0" promptText="Data" />
-                        <TextField layoutX="14.0" layoutY="78.0" promptText="Portaria / E-DOC" />
-                        <SplitMenuButton layoutX="14.0" layoutY="113.0" mnemonicParsing="false" text="Tipo do documento">
+                        <DatePicker layoutX="14.0" layoutY="67.0" prefHeight="25.0" prefWidth="145.0" promptText="Data" />
+                        <TextField layoutX="14.0" layoutY="104.0" promptText="Portaria / E-DOC" />
+                        <SplitMenuButton layoutX="14.0" layoutY="139.0" mnemonicParsing="false" text="Tipo do documento">
                           <items>
                             <MenuItem mnemonicParsing="false" text="Action 1" />
                             <MenuItem mnemonicParsing="false" text="Action 2" />
                           </items>
                         </SplitMenuButton>
-                        <ChoiceBox layoutX="14.0" layoutY="149.0" prefWidth="150.0" />
+                        <ChoiceBox layoutX="14.0" layoutY="175.0" prefWidth="150.0" />
                         <Button layoutX="14.0" layoutY="325.0" mnemonicParsing="false" onAction="#organize" prefHeight="25.0" prefWidth="150.0" text="Organizar" />
                         <Label layoutX="14.0" layoutY="10.0" text="Pasta:" />
-                        <Label fx:id="folderName" layoutX="51.0" layoutY="10.0" text="..." />
+                        <Label fx:id="folderName" layoutX="69.0" layoutY="10.0" text="..." />
                         <ProgressBar layoutX="14.0" layoutY="283.0" prefHeight="18.0" prefWidth="162.0" progress="0.0" />
+                        <Label layoutX="14.0" layoutY="27.0" text="Imagem:" />
+                        <Label fx:id="imageName" layoutX="69.0" layoutY="27.0" text="..." />
+                        <Hyperlink layoutX="16.0" layoutY="44.0" onAction="#link" text="Hyperlink" />
                      </children>
                   </AnchorPane>
               </items>
