@@ -1,9 +1,11 @@
 package organize_files;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
+import java.io.IOException;
+import application.FXMLMainScreenController;
 import application.Main;
 import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
@@ -19,16 +21,25 @@ public class OpenDirectory {
 		return directory;
 	}
 	
-	public Image openImage(int index) {
+	public Image image(int index) {
 		FileInputStream input = null;
 		try {
-			input = new FileInputStream(directory.listFiles()[index]);
+			input = new FileInputStream(FXMLMainScreenController.fileImages.get(index));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Image image = new Image(input);
 		return image;
+	}
+	
+	public static void openWindows(File path) {
+		try {
+			Desktop.getDesktop().open(path);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

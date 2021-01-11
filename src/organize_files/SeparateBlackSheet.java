@@ -3,36 +3,46 @@ package organize_files;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
 import application.FXMLMainScreenController;
 
-public class RemoveWhiteSheet {
-	
-	public void start() throws IOException {
+public class SeparateBlackSheet {
+
+	public static ArrayList<File> files() throws IOException {
 		File directory = FXMLMainScreenController.directory;
 		File[] files = directory.listFiles();
+		ArrayList<File> selectedFiles = new ArrayList<File>();
 		BufferedImage img = null;
 		
-		for (int i = 0; i < files.length; i++) {
+		int size = files.length;
+		for (int i = 0; i < size; i++) {
 			if (files[i].isFile()) {
 				img = ImageIO.read(files[i]);
-				System.out.println(files[i].getName() + " : " + isWhitePage(img, 0.999));
-				
+				if (!isBlackPage(img)) {
+					selectedFiles.add(files[i]);
+				} else {
+					size = 0;
+				}
+				System.out.println(files[i].getName());
 			} 
 		}
+		System.out.println(selectedFiles.size());
+		return selectedFiles;
 	}
 	
-	private boolean isWhitePage(BufferedImage img, double value) {
+	private static boolean isBlackPage(BufferedImage img) {
 		double sum = 0;
 		for (int y = 0; y < img.getHeight(); y++) {
 			for (int x = 0; x < img.getWidth(); x++) {
 				int px = img.getRGB(x, y);
 
-				int r = (px & 0x00ff0000) >>> 16;
-				int b = (px & 0x0000ff00) >>> 8;
-				int g = (px & 0x000000ff);
+				int r = (px & 0xff) >>> 16;
+				int b = (px & 0xff) >>> 8;
+				int g = (px & 0xff);
 
 				double l = (r / 255.f + g / 255.f + b / 255.f) / 3.;
 
@@ -41,8 +51,7 @@ public class RemoveWhiteSheet {
 		}
 
 		sum /= img.getWidth() * img.getHeight();
-
-		return sum > value;
+		return sum < 0.001;
 	}
-
+	
 }

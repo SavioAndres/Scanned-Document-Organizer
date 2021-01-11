@@ -20,7 +20,7 @@
 
 <VBox prefHeight="671.0" prefWidth="774.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXMLMainScreenController">
    <children>
-    <MenuBar>
+    <MenuBar fx:id="menu">
       <menus>
         <Menu mnemonicParsing="false" text="Documento">
           <items>
@@ -38,9 +38,8 @@
     </MenuBar>
       <Pane fx:id="backgroundPrimary">
          <children>
-            <Button fx:id="btnOpenFolder" layoutX="250.0" layoutY="150.0" mnemonicParsing="false" onAction="#openDirectory" prefHeight="25.0" prefWidth="129.0" text="Abrir Pasta" />
-            <Button fx:id="btnRemoveWhite" layoutX="250.0" layoutY="150.0" mnemonicParsing="false" onAction="#removeWhiteSheet" text="Remover Brancas" />
-            <Label fx:id="removalResponse" layoutX="250.0" layoutY="180.0" text="Aguardando remoção" />
+            <Label fx:id="lbIntro" layoutX="300.0" layoutY="180.0" text="Abra a pasta na qual você quer organizar os arquivos" />
+            <Button fx:id="btnOpenFolder" layoutX="300.0" layoutY="200.0" mnemonicParsing="false" onAction="#openDirectory" prefHeight="25.0" prefWidth="129.0" text="Abrir Pasta" />
             <SplitPane fx:id="background" dividerPositions="0.7" maxHeight="900.0" maxWidth="1200.0" prefHeight="646.0" prefWidth="774.0">
               <items>
                 <AnchorPane>
