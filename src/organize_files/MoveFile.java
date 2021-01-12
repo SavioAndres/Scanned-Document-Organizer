@@ -16,6 +16,7 @@ public class MoveFile {
 
 	public void MoveFiles(ArrayList<File> fileImages) {
 		File directory = FXMLMainScreenController.directory;
+		
 		for (int i = 0; i < fileImages.size(); i++) {
 			if (fileImages.get(i).isFile()) {
 				System.out.println(directory.getAbsolutePath() + " -- " + fileImages.get(i).getName());

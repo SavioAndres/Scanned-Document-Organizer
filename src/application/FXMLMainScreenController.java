@@ -1,6 +1,7 @@
 package application;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class FXMLMainScreenController implements Initializable {
 			Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
 			imageView.setImage(openDirectory.image(indexImage));
 			folderName.setText(directory.getName());
-			imageName.setText(directory.listFiles()[0].getName());
+			imageName.setText(fileImages.get(0).getName());
 			btnOpenFolder.setVisible(false);
 			menu.setVisible(true);
 			background.setVisible(true);
@@ -105,19 +106,19 @@ public class FXMLMainScreenController implements Initializable {
 	}
 	
 	@FXML
-	private void nextImage(ActionEvent event) {
+	private void nextImage(ActionEvent event) throws FileNotFoundException, IOException {
 		indexImage++;
 		imageView.setImage(openDirectory.image(indexImage));
 		previousImage.setDisable(false);
-		imageName.setText(directory.listFiles()[indexImage].getName());
+		imageName.setText(fileImages.get(indexImage).getName());
 	}
 	
 	@FXML
-	private void previousImage(ActionEvent event) {
+	private void previousImage(ActionEvent event) throws FileNotFoundException, IOException {
 		if (indexImage > 0) {
 			indexImage--;
 			imageView.setImage(openDirectory.image(indexImage));
-			imageName.setText(directory.listFiles()[indexImage].getName());
+			imageName.setText(fileImages.get(indexImage).getName());
 		} else {
 			previousImage.setDisable(true);
 		}

@@ -21,15 +21,11 @@ public class OpenDirectory {
 		return directory;
 	}
 	
-	public Image image(int index) {
-		FileInputStream input = null;
-		try {
-			input = new FileInputStream(FXMLMainScreenController.fileImages.get(index));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public Image image(int index) throws FileNotFoundException, IOException {
+		FileInputStream input = new FileInputStream(FXMLMainScreenController.fileImages.get(index));
 		Image image = new Image(input);
+		input.close();
+		
 		return image;
 	}
 	
