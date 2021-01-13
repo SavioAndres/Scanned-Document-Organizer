@@ -56,8 +56,8 @@
                   </AnchorPane>
                 <AnchorPane>
                      <children>
-                        <DatePicker layoutX="17.0" layoutY="77.0" prefHeight="25.0" prefWidth="145.0" promptText="Data" />
-                        <TextField layoutX="15.0" layoutY="125.0" promptText="Portaria / E-DOC" />
+                        <DatePicker fx:id="date" layoutX="17.0" layoutY="77.0" prefHeight="25.0" prefWidth="145.0" promptText="Data" />
+                        <TextField fx:id="portariaEdoc" layoutX="15.0" layoutY="125.0" promptText="Portaria / E-DOC" />
                         <ComboBox fx:id="typeDoc" layoutX="15.0" layoutY="275.0" onAction="#typeDoc" prefWidth="150.0" />
                         <ComboBox fx:id="subTypeDoc" layoutX="15.0" layoutY="322.0" prefWidth="150.0" />
                         <Button layoutX="40.0" layoutY="598.0" mnemonicParsing="false" onAction="#organize" prefHeight="25.0" prefWidth="150.0" text="Organizar" />

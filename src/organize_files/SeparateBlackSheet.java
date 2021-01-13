@@ -6,15 +6,13 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
 import application.FXMLMainScreenController;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class SeparateBlackSheet {
 
@@ -31,13 +29,19 @@ public class SeparateBlackSheet {
 		Arrays.sort(files, new Comparator<File>() {
 		    public int compare(File f1, File f2) {
 		        try {
-		        	String fName1=f1.getName().substring(0,f1.getName().lastIndexOf("."));
-		        	String fName2=f2.getName().substring(0,f2.getName().lastIndexOf("."));
+		        	String fName1=f1.getName().substring(f1.getName().lastIndexOf("(") + 1, f1.getName().lastIndexOf(")"));
+		        	String fName2=f2.getName().substring(f2.getName().lastIndexOf("(") + 1, f2.getName().lastIndexOf(")"));
 		        	
 		            int i1 = Integer.parseInt(fName1);
 		            int i2 = Integer.parseInt(fName2);
 		            return i1 - i2;
-		        } catch(NumberFormatException e) {
+		        } catch(Exception e) {
+		        	Alert alert = new Alert(AlertType.WARNING);
+		        	alert.setTitle("Atenção!");
+		        	alert.setHeaderText("Não é possível ler os arquivos.");
+		        	alert.setContentText("Verifique se o nome de todas as imagens têm parênteses de abertura e fechamento com número entre. Exemplo: (12)\nPara renomear as imagens nesse padrão basta: Ctrl + A, F2, digitar uma letra qualquer e enter.");
+
+		        	alert.showAndWait();
 		            throw new AssertionError(e);
 		        }
 		    }

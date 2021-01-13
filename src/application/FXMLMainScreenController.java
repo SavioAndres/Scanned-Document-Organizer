@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,11 +13,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import organize_files.DocumentType;
@@ -48,6 +49,10 @@ public class FXMLMainScreenController implements Initializable {
 	@FXML
 	private Hyperlink imageName;
 	@FXML
+	private DatePicker date;
+	@FXML
+	private TextField portariaEdoc;
+	@FXML
 	private Button previousImage;
 	@FXML
 	private Button btnOpenFolder;
@@ -74,6 +79,7 @@ public class FXMLMainScreenController implements Initializable {
 	private void openDirectory(ActionEvent event) {
 		try {
 			directory = openDirectory.open();
+			
 			fileImages = SeparateBlackSheet.files();
 			Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
 			imageView.setImage(openDirectory.image(indexImage));
@@ -102,6 +108,11 @@ public class FXMLMainScreenController implements Initializable {
 	private void organize(ActionEvent event) {
 		MoveFile moveFile = new MoveFile();
 		
+		if (!DocumentType.subTypeDisable) {
+			moveFile.setData(date.getValue().toString(), portariaEdoc.getText(), typeDoc.getValue() + " " + DocumentType.valueType);
+		} else {
+			moveFile.setData(date.getValue().toString(), portariaEdoc.getText(), typeDoc.getValue());
+		}
 		moveFile.MoveFiles(fileImages);
 	}
 	
@@ -160,7 +171,5 @@ public class FXMLMainScreenController implements Initializable {
 			subTypeDoc.getItems().setAll(DocumentType.itens);
 		}
 	}
-	
-	
 	
 }
