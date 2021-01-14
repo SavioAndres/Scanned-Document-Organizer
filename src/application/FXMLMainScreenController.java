@@ -49,11 +49,19 @@ public class FXMLMainScreenController implements Initializable {
 	@FXML
 	private Hyperlink imageName;
 	@FXML
+	private Label numberPage;
+	@FXML
 	private DatePicker date;
 	@FXML
 	private TextField portariaEdoc;
 	@FXML
+	private Button firstPage;
+	@FXML
+	private Button lastPage;
+	@FXML
 	private Button previousImage;
+	@FXML
+	private Button nextImage;
 	@FXML
 	private Button btnOpenFolder;
 	@FXML
@@ -64,6 +72,8 @@ public class FXMLMainScreenController implements Initializable {
 	private ComboBox<String> typeDoc;
 	@FXML
 	private ComboBox<String> subTypeDoc;
+	@FXML
+	private TextField portariaPage;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -73,18 +83,21 @@ public class FXMLMainScreenController implements Initializable {
 		imageView.setFitWidth(550);
 		slide();
 		typeDoc.getItems().setAll(DocumentType.types());
+		firstPage.setDisable(true);
+		previousImage.setDisable(true);
 	}
 
 	@FXML
 	private void openDirectory(ActionEvent event) {
 		try {
 			directory = openDirectory.open();
-			
+			RemoveWhiteSheet.start();
 			fileImages = SeparateBlackSheet.files();
 			Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
 			imageView.setImage(openDirectory.image(indexImage));
 			folderName.setText(directory.getName());
 			imageName.setText(fileImages.get(0).getName());
+			numberPage.setText((indexImage + 1) + "");
 			btnOpenFolder.setVisible(false);
 			menu.setVisible(true);
 			background.setVisible(true);
@@ -95,9 +108,8 @@ public class FXMLMainScreenController implements Initializable {
 
 	@FXML
 	private void removeWhiteSheet(ActionEvent event) {
-		RemoveWhiteSheet rws = new RemoveWhiteSheet();
 		try {
-			rws.start();
+			RemoveWhiteSheet.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -109,19 +121,63 @@ public class FXMLMainScreenController implements Initializable {
 		MoveFile moveFile = new MoveFile();
 		
 		if (!DocumentType.subTypeDisable) {
-			moveFile.setData(date.getValue().toString(), portariaEdoc.getText(), typeDoc.getValue() + " " + DocumentType.valueType);
+			moveFile.setData(date.getValue(), portariaEdoc.getText(), typeDoc.getValue() + " " + subTypeDoc.getValue());
 		} else {
-			moveFile.setData(date.getValue().toString(), portariaEdoc.getText(), typeDoc.getValue());
+			moveFile.setData(date.getValue(), portariaEdoc.getText(), typeDoc.getValue());
 		}
 		moveFile.MoveFiles(fileImages);
+		try {
+			fileImages = SeparateBlackSheet.files();
+			indexImage = 0;
+			imageView.setImage(openDirectory.image(indexImage));
+			imageName.setText(fileImages.get(0).getName());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
+	private void firstPage(ActionEvent event) throws FileNotFoundException, IOException {
+		indexImage = 0;
+		imageView.setImage(openDirectory.image(indexImage));
+		nextImage.setDisable(false);
+		previousImage.setDisable(true);
+		imageName.setText(fileImages.get(indexImage).getName());
+		numberPage.setText((indexImage + 1) + "");
+		firstPage.setDisable(true);
+		lastPage.setDisable(false);
+	}
+	
+	@FXML
+	private void lastPage(ActionEvent event) throws FileNotFoundException, IOException {
+		indexImage = fileImages.size() - 1;
+		imageView.setImage(openDirectory.image(indexImage));
+		nextImage.setDisable(true);
+		previousImage.setDisable(false);
+		imageName.setText(fileImages.get(indexImage).getName());
+		numberPage.setText((indexImage + 1) + "");
+		firstPage.setDisable(false);
+		lastPage.setDisable(true);
 	}
 	
 	@FXML
 	private void nextImage(ActionEvent event) throws FileNotFoundException, IOException {
-		indexImage++;
-		imageView.setImage(openDirectory.image(indexImage));
-		previousImage.setDisable(false);
-		imageName.setText(fileImages.get(indexImage).getName());
+		if (indexImage < fileImages.size() - 1) {
+			indexImage++;
+			imageView.setImage(openDirectory.image(indexImage));
+			previousImage.setDisable(false);
+			firstPage.setDisable(false);
+			imageName.setText(fileImages.get(indexImage).getName());
+			numberPage.setText((indexImage + 1) + "");
+			if (indexImage == fileImages.size() - 1) {
+				nextImage.setDisable(true);
+				lastPage.setDisable(true);
+			}
+		} else {
+			nextImage.setDisable(true);
+			lastPage.setDisable(true);
+		}
 	}
 	
 	@FXML
@@ -129,9 +185,17 @@ public class FXMLMainScreenController implements Initializable {
 		if (indexImage > 0) {
 			indexImage--;
 			imageView.setImage(openDirectory.image(indexImage));
+			nextImage.setDisable(false);
+			lastPage.setDisable(false);
 			imageName.setText(fileImages.get(indexImage).getName());
+			numberPage.setText((indexImage + 1) + "");
+			if (indexImage == 0) {
+				previousImage.setDisable(true);
+				firstPage.setDisable(true);
+			}
 		} else {
 			previousImage.setDisable(true);
+			firstPage.setDisable(true);
 		}
 	}
 	
@@ -157,7 +221,7 @@ public class FXMLMainScreenController implements Initializable {
 	
 	@FXML
 	private void linkImageName(ActionEvent event) {
-		OpenDirectory.openWindows(directory.listFiles()[indexImage]);
+		OpenDirectory.openWindows(fileImages.get(indexImage));
 	}
 	
 	@FXML

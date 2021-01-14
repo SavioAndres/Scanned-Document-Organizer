@@ -2,7 +2,10 @@ package organize_files;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -10,21 +13,41 @@ import application.FXMLMainScreenController;
 
 public class RemoveWhiteSheet {
 	
-	public void start() throws IOException {
+	public static void start() throws IOException {
 		File directory = FXMLMainScreenController.directory;
-		File[] files = directory.listFiles();
+		
+		File[] files = directory.listFiles(new FilenameFilter() {
+		    public boolean accept(File dir, String name) {
+		    	System.out.println(dir);
+		        return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png");
+		    }
+		});
+		
+		
+		File newDirectory = new File(directory.getAbsolutePath() + "\\brancas");
+		if (!newDirectory.exists())
+			newDirectory.mkdir();
+		
 		BufferedImage img = null;
 		
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].isFile()) {
 				img = ImageIO.read(files[i]);
-				System.out.println(files[i].getName() + " : " + isWhitePage(img, 0.999));
-				
+				System.out.println(files[i].getName() + " : " + isWhitePage(img));
+				if (isWhitePage(img)) {
+					try {
+						Files.move(Paths.get(directory.getAbsolutePath() + "\\" + files[i].getName()),
+								Paths.get(newDirectory.getAbsolutePath() + "\\" + i + "." + files[i].getName().substring(files[i].getName().lastIndexOf(".") + 1)));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			} 
 		}
 	}
 	
-	private boolean isWhitePage(BufferedImage img, double value) {
+	private static boolean isWhitePage(BufferedImage img) {
 		double sum = 0;
 		for (int y = 0; y < img.getHeight(); y++) {
 			for (int x = 0; x < img.getWidth(); x++) {
@@ -42,7 +65,7 @@ public class RemoveWhiteSheet {
 
 		sum /= img.getWidth() * img.getHeight();
 
-		return sum > value;
+		return sum > 0.999;
 	}
 
 }
