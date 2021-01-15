@@ -78,20 +78,20 @@ public class FXMLMainScreenController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
-		background.setVisible(false);
-		menu.setVisible(false);
+		//background.setVisible(false);
+		//menu.setVisible(false);
 		imageView.setFitWidth(550);
 		slide();
 		typeDoc.getItems().setAll(DocumentType.types());
-		firstPage.setDisable(true);
-		previousImage.setDisable(true);
+		//firstPage.setDisable(true);
+		//previousImage.setDisable(true);
 	}
 
 	@FXML
 	private void openDirectory(ActionEvent event) {
 		try {
 			directory = openDirectory.open();
-			RemoveWhiteSheet.start();
+			//RemoveWhiteSheet.start();
 			fileImages = SeparateBlackSheet.files();
 			Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
 			imageView.setImage(openDirectory.image(indexImage));
@@ -131,6 +131,16 @@ public class FXMLMainScreenController implements Initializable {
 			indexImage = 0;
 			imageView.setImage(openDirectory.image(indexImage));
 			imageName.setText(fileImages.get(0).getName());
+			date.setValue(null);
+			portariaEdoc.setText("");
+			typeDoc.setValue("");
+			subTypeDoc.setValue("");
+			portariaPage.setText("");
+			
+			firstPage.setDisable(true);
+			previousImage.setDisable(true);
+			lastPage.setDisable(false);
+			nextImage.setDisable(false);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

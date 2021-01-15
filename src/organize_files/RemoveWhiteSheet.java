@@ -1,5 +1,6 @@
 package organize_files;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -14,6 +15,9 @@ import application.FXMLMainScreenController;
 public class RemoveWhiteSheet {
 	
 	public static void start() throws IOException {
+		long tempoInicio = System.currentTimeMillis();
+		
+		
 		File directory = FXMLMainScreenController.directory;
 		
 		File[] files = directory.listFiles(new FilenameFilter() {
@@ -32,7 +36,25 @@ public class RemoveWhiteSheet {
 		
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].isFile()) {
-				img = ImageIO.read(files[i]);
+				//img = ImageIO.read(files[i]);
+				
+				
+				
+			    BufferedImage originalImage = ImageIO.read(files[i]);
+			    
+			    int dstWidth = originalImage.getWidth() / 3;
+			    int dstHeight = originalImage.getHeight() / 3;
+			    
+			    BufferedImage resizedImage = new BufferedImage(dstWidth, dstHeight, BufferedImage.TYPE_INT_ARGB);
+			    Graphics2D g = resizedImage.createGraphics();
+			    g.drawImage(originalImage, 0, 0, dstWidth, dstHeight, null);
+			    g.dispose();
+				
+			    img = resizedImage;
+			    
+				
+				
+				
 				System.out.println(files[i].getName() + " : " + isWhitePage(img));
 				if (isWhitePage(img)) {
 					try {
@@ -45,6 +67,9 @@ public class RemoveWhiteSheet {
 				}
 			} 
 		}
+		
+		long dif = System.currentTimeMillis() - tempoInicio;
+		System.out.println("Tempo Total: "+(String.format("%02d segundos  e %02d milisegundos", dif/1000, dif%1000)));
 	}
 	
 	private static boolean isWhitePage(BufferedImage img) {
@@ -64,6 +89,7 @@ public class RemoveWhiteSheet {
 		}
 
 		sum /= img.getWidth() * img.getHeight();
+		System.out.println("nivel branca: " + sum);
 
 		return sum > 0.999;
 	}
