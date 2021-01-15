@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.pdfbox.tools.ExtractImages;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -23,6 +28,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import organize_files.DocumentType;
+import organize_files.ExtractText;
 import organize_files.MoveFile;
 import organize_files.OpenDirectory;
 import organize_files.RemoveWhiteSheet;
@@ -85,6 +91,25 @@ public class FXMLMainScreenController implements Initializable {
 		typeDoc.getItems().setAll(DocumentType.types());
 		//firstPage.setDisable(true);
 		//previousImage.setDisable(true);
+		
+		
+		
+		String regex="(\\d{3}.\\d{3}-\\d{5}/\\d{4}-\\d{1})*";
+		String text = "Em um texto grande mary@xpto.com.zip.test pode 016.000-23421/1234-1 ser necessário procurar por uma lista de e-mails tom@abc.com and harry@zyx.com";
+
+		Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(text);
+
+        String listaEmail = "";
+        System.out.println(matcher.find());
+
+        while (matcher.find()) {
+        	listaEmail += matcher.group() + " ";
+        }
+        System.out.println(listaEmail.trim());
+
+
 	}
 
 	@FXML
@@ -93,6 +118,8 @@ public class FXMLMainScreenController implements Initializable {
 			directory = openDirectory.open();
 			//RemoveWhiteSheet.start();
 			fileImages = SeparateBlackSheet.files();
+			ExtractText aa = new ExtractText();
+			System.out.println(aa.readImage(fileImages.get(3)));
 			Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
 			imageView.setImage(openDirectory.image(indexImage));
 			folderName.setText(directory.getName());

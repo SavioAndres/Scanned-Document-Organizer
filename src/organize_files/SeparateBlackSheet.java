@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import application.FXMLMainScreenController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import structure.ResizeImage;
 
 public class SeparateBlackSheet {
 
@@ -83,17 +84,8 @@ public class SeparateBlackSheet {
 				//img = ImageIO.read(files[i]);
 				
 				
-				BufferedImage originalImage = ImageIO.read(files[i]);
 			    
-			    int dstWidth = originalImage.getWidth() / 3;
-			    int dstHeight = originalImage.getHeight() / 3;
-			    
-			    BufferedImage resizedImage = new BufferedImage(dstWidth, dstHeight, BufferedImage.TYPE_INT_ARGB);
-			    Graphics2D g = resizedImage.createGraphics();
-			    g.drawImage(originalImage, 0, 0, dstWidth, dstHeight, null);
-			    g.dispose();
-				
-			    img = resizedImage;
+			    img = ResizeImage.resize(files[i], 3);
 				
 				
 				if (isBlackPage(img) == 0) {
