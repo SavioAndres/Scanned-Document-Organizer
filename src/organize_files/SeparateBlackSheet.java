@@ -86,6 +86,7 @@ public class SeparateBlackSheet {
 				
 			    
 			    img = ResizeImage.resize(files[i], 3);
+			    //ImageIO.write(img, "jpg", new File("C:\\Users\\savio\\Pictures\\test\\pretobranco2.jpg"));
 				
 				
 				if (isBlackPage(img) == 0) {

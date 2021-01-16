@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.text.BreakIterator;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -11,21 +13,28 @@ import java.util.regex.Pattern;
 
 import org.apache.pdfbox.tools.ExtractImages;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import organize_files.DocumentType;
 import organize_files.ExtractText;
@@ -44,8 +53,6 @@ public class FXMLMainScreenController implements Initializable {
 
 	@FXML
 	private MenuBar menu;
-	@FXML
-	private Pane backgroundPrimary;
 	@FXML
 	private SplitPane background;
 	@FXML
@@ -80,46 +87,41 @@ public class FXMLMainScreenController implements Initializable {
 	private ComboBox<String> subTypeDoc;
 	@FXML
 	private TextField portariaPage;
+	@FXML
+	private CheckMenuItem autoDetection;
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		//background.setVisible(false);
 		//menu.setVisible(false);
-		imageView.setFitWidth(550);
 		slide();
+		maskDate();
 		typeDoc.getItems().setAll(DocumentType.types());
 		//firstPage.setDisable(true);
 		//previousImage.setDisable(true);
-		
-		
-		
-		String regex="(\\d{3}.\\d{3}-\\d{5}/\\d{4}-\\d{1})*";
-		String text = "Em um texto grande mary@xpto.com.zip.test pode 016.000-23421/1234-1 ser necessário procurar por uma lista de e-mails tom@abc.com and harry@zyx.com";
-
-		Pattern pattern = Pattern.compile(regex);
-
-        Matcher matcher = pattern.matcher(text);
-
-        String listaEmail = "";
-        System.out.println(matcher.find());
-
-        while (matcher.find()) {
-        	listaEmail += matcher.group() + " ";
-        }
-        System.out.println(listaEmail.trim());
-
-
 	}
 
 	@FXML
 	private void openDirectory(ActionEvent event) {
 		try {
 			directory = openDirectory.open();
+			
+			imageView.setFitWidth(668);
 			//RemoveWhiteSheet.start();
 			fileImages = SeparateBlackSheet.files();
-			ExtractText aa = new ExtractText();
-			System.out.println(aa.readImage(fileImages.get(3)));
+			
+			if (autoDetection.isSelected()) {
+				//ExtractText aa = new ExtractText();
+				ExtractText.readImage(fileImages.get(0));
+				System.out.println(ExtractText.getText());
+				portariaEdoc.setText(ExtractText.regexPortaria());
+				portariaPage.setText(ExtractText.regexDate());
+				System.out.println("Resultado regex: " + ExtractText.regexDate());
+			}
+			
+			
+			
 			Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
 			imageView.setImage(openDirectory.image(indexImage));
 			folderName.setText(directory.getName());
@@ -132,6 +134,7 @@ public class FXMLMainScreenController implements Initializable {
 			// TODO: handle exception
 		}
 	}
+	
 
 	@FXML
 	private void removeWhiteSheet(ActionEvent event) {
@@ -237,9 +240,9 @@ public class FXMLMainScreenController implements Initializable {
 	}
 	
 	private void slide() {
-		zoom.setMin(300);
+		zoom.setMin(410);
 		zoom.setMax(1200);
-		zoom.setValue(550);
+		zoom.setValue(668);
 		zoom.setShowTickLabels(true);
 		zoom.setShowTickMarks(true);
 		zoom.setBlockIncrement(10);
@@ -271,6 +274,23 @@ public class FXMLMainScreenController implements Initializable {
 			subTypeDoc.setValue(DocumentType.valueType);
 			subTypeDoc.getItems().setAll(DocumentType.itens);
 		}
+	}
+	
+	private void maskDate() {
+		TextField dateEditor = date.getEditor();
+        
+		dateEditor.addEventHandler(KeyEvent.KEY_TYPED, event -> {
+        	Platform.runLater(() -> {
+                String textUntilHere = dateEditor.getText(0, dateEditor.getCaretPosition());
+                if (textUntilHere.matches("\\d\\d") || textUntilHere.matches("\\d\\d/\\d\\d")) {
+                    String textAfterHere = "";
+                    try { textAfterHere = dateEditor.getText(dateEditor.getCaretPosition()+1, dateEditor.getText().length()); } catch (Exception ignored) {}
+                    int caretPosition = dateEditor.getCaretPosition();
+                    dateEditor.setText(textUntilHere + "/" + textAfterHere);
+                    dateEditor.positionCaret(caretPosition+1);
+                }
+            });
+        });
 	}
 	
 }

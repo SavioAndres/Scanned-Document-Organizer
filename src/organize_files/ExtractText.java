@@ -4,6 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
@@ -16,7 +19,7 @@ public class ExtractText {
 	
 	private static String text;
 	
-	public static String readImage(File imageFile) throws IOException {
+	public static void readImage(File imageFile) throws IOException {
 		long tempoInicio = System.currentTimeMillis();
 		//File imageFile = new File("C:\\Users\\savio\\Pictures\\20170606_153524.jpg");
         ITesseract instance = new Tesseract();  // JNA Interface Mapping
@@ -28,7 +31,7 @@ public class ExtractText {
         	//instance.doOCR(imageFile)imageFile.;
         	
 		    
-		    BufferedImage image = ResizeImage.resize(imageFile, 2);
+		    BufferedImage image = ResizeImage.resize(imageFile, 3);
 			
         	
         	
@@ -38,15 +41,66 @@ public class ExtractText {
     		System.out.println("Tempo Total: "+(String.format("%02d segundos  e %02d milisegundos", dif/1000, dif%1000)));
     		
             text = result;
-            return result;
         } catch (TesseractException e) {
             e.getMessage();
         }
+	}
+	
+	public static String getText() {
 		return text;
 	}
 	
-	private void regex() {
-		
+	public static String regexPortaria() {
+		String regex = "(\\d{6}.\\d{5}/\\d{4}.\\d{2} | "
+				+ "\\d{6}.\\d{5}/\\d{4}-\\d{2} | "
+				+ "\\d{3}.\\d{3}-\\d{5}/\\d{4}-\\d{2} | "
+				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}-\\d{2} | "
+				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}.\\d{2} | "
+				+ "\\d{6}.\\d{5}/\\d{4}.\\d{1} | "
+				+ "\\d{6}.\\d{5}/\\d{4}-\\d{1} | "
+				+ "\\d{3}.\\d{3}-\\d{5}/\\d{4}-\\d{1} | "
+				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}-\\d{1} | "
+				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}.\\d{1})*";
+		System.out.println(regex);
+		//String text = "Em um texto 123.456.65432/1234-12 grande mary@xpto.com.zip.test pode 016.000-23421/1234-1 ser necessário procurar por uma lista de e-mails tom@abc.com and harry@zyx.com";
+
+		Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(text);
+
+        String portaria = "";
+
+        while (matcher.find()) {
+        	if (matcher.group().contains(".")) {
+        		portaria = matcher.group();
+        		break;
+        	}
+        	//listaEmail += matcher.group() + " ";
+        }
+        System.out.println(portaria);
+		return portaria;
+	}
+	
+	public static String regexDate() {
+		String regex = "(\\d{2}/\\d{2}/\\d{4})*";
+		System.out.println(regex);
+		//String text = "Em um texto 123.456.65432/1234-12 grande mary@xpto.com.zip.test pode 016.000-23421/1234-1 ser necessário procurar por uma lista de e-mails tom@abc.com and harry@zyx.com";
+
+		Pattern pattern = Pattern.compile(regex);
+
+        Matcher matcher = pattern.matcher(text);
+
+        String date = "";
+
+        while (matcher.find()) {
+        	if (matcher.group().contains(".")) {
+        		date = matcher.group();
+        		break;
+        	}
+        	//listaEmail += matcher.group() + " ";
+        }
+        System.out.println(date);
+		return date;
 	}
 	
 	public static String getPortaria() {
