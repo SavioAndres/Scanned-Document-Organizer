@@ -116,7 +116,7 @@ public class FXMLMainScreenController implements Initializable {
 				ExtractText.readImage(fileImages.get(0));
 				System.out.println(ExtractText.getText());
 				portariaEdoc.setText(ExtractText.regexPortaria());
-				portariaPage.setText(ExtractText.regexDate());
+				date.setValue(ExtractText.regexDate());
 				System.out.println("Resultado regex: " + ExtractText.regexDate());
 			}
 			
@@ -151,9 +151,9 @@ public class FXMLMainScreenController implements Initializable {
 		MoveFile moveFile = new MoveFile();
 		
 		if (!DocumentType.subTypeDisable) {
-			moveFile.setData(date.getValue(), portariaEdoc.getText(), typeDoc.getValue() + " " + subTypeDoc.getValue());
+			moveFile.setData(date.getValue(), portariaEdoc.getText(), typeDoc.getValue() + " " + subTypeDoc.getValue(), portariaPage.getText());
 		} else {
-			moveFile.setData(date.getValue(), portariaEdoc.getText(), typeDoc.getValue());
+			moveFile.setData(date.getValue(), portariaEdoc.getText(), typeDoc.getValue(), portariaPage.getText());
 		}
 		moveFile.MoveFiles(fileImages);
 		try {

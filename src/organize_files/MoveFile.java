@@ -17,6 +17,7 @@ public class MoveFile {
 
 	private String folderName;
 	private String fileName;
+	private ArrayList<Integer> portariaPages;
 	
 	public void MoveFiles(ArrayList<File> fileImages) {
 		File directory = FXMLMainScreenController.directory;
@@ -30,11 +31,13 @@ public class MoveFile {
 			file = fileImages.get(i);
 			if (file.isFile()) {
 				//System.out.println(directory.getAbsolutePath() + " -- " + fileImages.get(i).getName());
-				
+				String port = "";
+				if (portariaPages.contains(i + 1))
+					port = "Portaria ";
 				
 				try {
 					Files.move(Paths.get(directory.getAbsolutePath() + "\\" + file.getName()),
-							Paths.get(newDirectory.getAbsolutePath() + "\\" + fileName + " " + i + "." + file.getName().substring(file.getName().lastIndexOf(".") + 1)));
+							Paths.get(newDirectory.getAbsolutePath() + "\\" + port + fileName + " " + i + "." + file.getName().substring(file.getName().lastIndexOf(".") + 1)));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -46,9 +49,15 @@ public class MoveFile {
 		}
 	}
 	
-	public void setData(LocalDate date, String portariaEdoc, String docType) {
+	public void setData(LocalDate date, String portariaEdoc, String docType, String portariaPage) {
 		folderName = date.getYear() + "." + String.format("%02d" , date.getMonthValue()) + "." + date.getDayOfMonth() + " " + portariaEdoc;
 		fileName = docType;
+		String[] result = portariaPage.split(",");
+		portariaPages = new ArrayList<Integer>();
+		for (int i = 0; i < result.length; i++) {
+			portariaPages.add(Integer.parseInt(result[i].trim()));
+		}
+		
 	}
 
 }

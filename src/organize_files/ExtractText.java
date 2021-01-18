@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +33,7 @@ public class ExtractText {
         	//instance.doOCR(imageFile)imageFile.;
         	
 		    
-		    BufferedImage image = ResizeImage.resize(imageFile, 3);
+		    BufferedImage image = ResizeImage.resize(imageFile, 2);
 			
         	
         	
@@ -40,7 +42,7 @@ public class ExtractText {
             long dif = System.currentTimeMillis() - tempoInicio;
     		System.out.println("Tempo Total: "+(String.format("%02d segundos  e %02d milisegundos", dif/1000, dif%1000)));
     		
-            text = result;
+            text = result.toLowerCase().replace("\n", " ");
         } catch (TesseractException e) {
             e.getMessage();
         }
@@ -60,7 +62,11 @@ public class ExtractText {
 				+ "\\d{6}.\\d{5}/\\d{4}-\\d{1} | "
 				+ "\\d{3}.\\d{3}-\\d{5}/\\d{4}-\\d{1} | "
 				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}-\\d{1} | "
-				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}.\\d{1})*";
+				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}.\\d{1} | "
+				+ "\\d{3}.\\d{3}-\\d{6}/\\d{4}-\\d{1} | "
+				+ "\\d{3}.\\d{3}.\\d{6}/\\d{4}-\\d{1} | "
+				+ "\\d{3}.\\d{3}-\\d{6}/\\d{4}-\\d{2} | "
+				+ "\\d{3}.\\d{3}.\\d{6}/\\d{4}-\\d{2})*";
 		System.out.println(regex);
 		//String text = "Em um texto 123.456.65432/1234-12 grande mary@xpto.com.zip.test pode 016.000-23421/1234-1 ser necessário procurar por uma lista de e-mails tom@abc.com and harry@zyx.com";
 
@@ -81,8 +87,9 @@ public class ExtractText {
 		return portaria;
 	}
 	
-	public static String regexDate() {
-		String regex = "(\\d{2}/\\d{2}/\\d{4})*";
+	public static LocalDate regexDate() {
+		//text = "geh jhf 12/12/2012 rgegrht";
+		String regex = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((?:19|20)[0-9][0-9])";
 		System.out.println(regex);
 		//String text = "Em um texto 123.456.65432/1234-12 grande mary@xpto.com.zip.test pode 016.000-23421/1234-1 ser necessário procurar por uma lista de e-mails tom@abc.com and harry@zyx.com";
 
@@ -91,16 +98,22 @@ public class ExtractText {
         Matcher matcher = pattern.matcher(text);
 
         String date = "";
+        //ArrayList<String> date = new ArrayList<String>();
 
         while (matcher.find()) {
-        	if (matcher.group().contains(".")) {
+        	if (matcher.group().contains("/")) {
         		date = matcher.group();
         		break;
         	}
         	//listaEmail += matcher.group() + " ";
         }
-        System.out.println(date);
-		return date;
+        
+        System.out.println("---> " + date);
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        //convert String to LocalDate
+        LocalDate localDate = LocalDate.parse(date, formatter);
+		return localDate;
 	}
 	
 	public static String getPortaria() {
