@@ -4,20 +4,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.text.BreakIterator;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.pdfbox.tools.ExtractImages;
-
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -27,15 +19,11 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Pane;
 import organize_files.DocumentType;
 import organize_files.ExtractText;
 import organize_files.MoveFile;
@@ -49,7 +37,6 @@ public class FXMLMainScreenController implements Initializable {
 	public static ArrayList<File> fileImages;
 	OpenDirectory openDirectory = new OpenDirectory();
 	private int indexImage = 0;
-	int zoomq = 300;
 
 	@FXML
 	private MenuBar menu;
@@ -97,6 +84,7 @@ public class FXMLMainScreenController implements Initializable {
 		//menu.setVisible(false);
 		slide();
 		maskDate();
+		//maskProtocolo();
 		typeDoc.getItems().setAll(DocumentType.types());
 		//firstPage.setDisable(true);
 		//previousImage.setDisable(true);
@@ -111,16 +99,7 @@ public class FXMLMainScreenController implements Initializable {
 			//RemoveWhiteSheet.start();
 			fileImages = SeparateBlackSheet.files();
 			
-			if (autoDetection.isSelected()) {
-				//ExtractText aa = new ExtractText();
-				ExtractText.readImage(fileImages.get(0));
-				System.out.println(ExtractText.getText());
-				portariaEdoc.setText(ExtractText.regexPortaria());
-				date.setValue(ExtractText.regexDate());
-				System.out.println("Resultado regex: " + ExtractText.regexDate());
-			}
-			
-			
+			autocomplete();
 			
 			Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
 			imageView.setImage(openDirectory.image(indexImage));
@@ -166,6 +145,7 @@ public class FXMLMainScreenController implements Initializable {
 			typeDoc.setValue("");
 			subTypeDoc.setValue("");
 			portariaPage.setText("");
+			autocomplete();
 			
 			firstPage.setDisable(true);
 			previousImage.setDisable(true);
@@ -291,6 +271,37 @@ public class FXMLMainScreenController implements Initializable {
                 }
             });
         });
+	}
+	
+	private void maskProtocolo() {
+		//TextField dateEditor = portariaEdoc.getEditor();
+        
+		portariaEdoc.addEventHandler(KeyEvent.KEY_TYPED, event -> {
+        	Platform.runLater(() -> {
+                String textUntilHere = portariaEdoc.getText(0, portariaEdoc.getCaretPosition());
+                if (textUntilHere.matches("\\d{3}\\.\\d{3}\\.\\d{5}/\\d{4}")) {
+                    String textAfterHere = "";
+                    try { textAfterHere = portariaEdoc.getText(portariaEdoc.getCaretPosition()+1, portariaEdoc.getText().length()); } catch (Exception ignored) {}
+                    int caretPosition = portariaEdoc.getCaretPosition();
+                    portariaEdoc.setText(textUntilHere + "-" + textAfterHere);
+                    portariaEdoc.positionCaret(caretPosition+1);
+                }
+            });
+        });
+	}
+	
+	private void autocomplete() throws IOException {
+		if (autoDetection.isSelected()) {
+			ExtractText.readImage(fileImages.get(0));
+			System.out.println("tamanho: " + fileImages.size() + " - List: " + fileImages.toString());
+			System.out.println(ExtractText.getText());
+			portariaEdoc.setText(ExtractText.getPortaria());
+			System.out.println(">>> " + ExtractText.getPortaria());
+			typeDoc.setValue(ExtractText.getTypeDoc());
+			System.out.println(">>>> " + ExtractText.getTypeDoc());
+			date.setValue(ExtractText.getDate());
+			System.out.println(">>>>> " + ExtractText.getDate());
+		}
 	}
 	
 }

@@ -1,6 +1,5 @@
 package organize_files;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -11,10 +10,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import javax.imageio.ImageIO;
-
-
 import application.FXMLMainScreenController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -25,7 +20,6 @@ public class SeparateBlackSheet {
 	public static ArrayList<File> files() throws IOException {
 		long tempoInicio = System.currentTimeMillis();
 		
-		
 		File directory = FXMLMainScreenController.directory;
 		File[] files = directory.listFiles(new FilenameFilter() {
 		    public boolean accept(File dir, String name) {
@@ -34,11 +28,9 @@ public class SeparateBlackSheet {
 		    }
 		});
 		
-		
 		File newDirectory = new File(directory.getAbsolutePath() + "\\brancas");
 		if (!newDirectory.exists())
 			newDirectory.mkdir();
-		
 		
 		// Sort files by name
 		Arrays.sort(files, new Comparator<File>() {
@@ -62,12 +54,6 @@ public class SeparateBlackSheet {
 		    }
 		});
 		
-		//Arrays.sort(files, Comparator.comparingInt());
-		//Arrays.sort(files, Comparator.comparingLong(File::lastModified));
-		//Arrays.sort(files, (f1, f2) -> f1.compareTo(f2));
-		//Arrays.sort(files);
-		//Arrays.sort(files, new AlphanumComparator());
-		
 		int gg = 0;
 		for (int i = 0; i < files.length; i++) {
 			System.out.print(files[i].getName() + ", ");
@@ -81,14 +67,8 @@ public class SeparateBlackSheet {
 		int size = files.length;
 		for (int i = 0; i < size; i++) {
 			if (files[i].isFile()) {
-				//img = ImageIO.read(files[i]);
-				
-				
-			    
 			    img = ResizeImage.resize(files[i], 3);
-			    //ImageIO.write(img, "jpg", new File("C:\\Users\\savio\\Pictures\\test\\pretobranco2.jpg"));
-				
-				
+
 				if (isBlackPage(img) == 0) {
 					selectedFiles.add(files[i]);
 				} else if (isBlackPage(img) == 1) {
@@ -117,7 +97,6 @@ public class SeparateBlackSheet {
 		long dif = System.currentTimeMillis() - tempoInicio;
 		System.out.println("Tempo Total: "+(String.format("%02d segundos  e %02d milisegundos", dif/1000, dif%1000)));
 		
-		
 		return selectedFiles;
 	}
 	
@@ -126,11 +105,6 @@ public class SeparateBlackSheet {
 		for (int y = 0; y < img.getHeight(); y++) {
 			for (int x = 0; x < img.getWidth(); x++) {
 				int px = img.getRGB(x, y);
-
-				/*int r = (px & 0xff) >>> 16;
-				int b = (px & 0xff) >>> 8;
-				int g = (px & 0xff);*/
-				
 				
 				int r = (px & 0x00ff0000) >>> 16;
 				int b = (px & 0x0000ff00) >>> 8;

@@ -1,42 +1,35 @@
 package organize_files;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.imageio.ImageIO;
-
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
-import structure.ResizeImage;
 
 public class ExtractText {
 	
 	private static String text;
 	
 	public static void readImage(File imageFile) throws IOException {
+		
+		
 		long tempoInicio = System.currentTimeMillis();
-		//File imageFile = new File("C:\\Users\\savio\\Pictures\\20170606_153524.jpg");
-        ITesseract instance = new Tesseract();  // JNA Interface Mapping
-        // ITesseract instance = new Tesseract1(); // JNA Direct Mapping
+		
+        ITesseract instance = new Tesseract();
+        
         instance.setDatapath("C:\\Users\\savio\\Projects\\Java\\Scanned-Document-Organizer\\tessdata"); // path to tessdata directory
         instance.setLanguage("por");
 
         try {
-        	//instance.doOCR(imageFile)imageFile.;
-        	
-		    
-		    BufferedImage image = ResizeImage.resize(imageFile, 2);
+		    //BufferedImage image = ResizeImage.resize(imageFile, 2);
+        	BufferedImage image = ImageIO.read(imageFile);
 			
-        	
-        	
             String result = instance.doOCR(image);
             
             long dif = System.currentTimeMillis() - tempoInicio;
@@ -52,24 +45,13 @@ public class ExtractText {
 		return text;
 	}
 	
-	public static String regexPortaria() {
-		String regex = "(\\d{6}.\\d{5}/\\d{4}.\\d{2} | "
-				+ "\\d{6}.\\d{5}/\\d{4}-\\d{2} | "
-				+ "\\d{3}.\\d{3}-\\d{5}/\\d{4}-\\d{2} | "
-				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}-\\d{2} | "
-				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}.\\d{2} | "
-				+ "\\d{6}.\\d{5}/\\d{4}.\\d{1} | "
+	public static String getPortaria() {
+		String regex = "(\\d{6}.\\d{5}/\\d{4}.\\d{1} | "
 				+ "\\d{6}.\\d{5}/\\d{4}-\\d{1} | "
 				+ "\\d{3}.\\d{3}-\\d{5}/\\d{4}-\\d{1} | "
 				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}-\\d{1} | "
-				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}.\\d{1} | "
-				+ "\\d{3}.\\d{3}-\\d{6}/\\d{4}-\\d{1} | "
-				+ "\\d{3}.\\d{3}.\\d{6}/\\d{4}-\\d{1} | "
-				+ "\\d{3}.\\d{3}-\\d{6}/\\d{4}-\\d{2} | "
-				+ "\\d{3}.\\d{3}.\\d{6}/\\d{4}-\\d{2})*";
-		System.out.println(regex);
-		//String text = "Em um texto 123.456.65432/1234-12 grande mary@xpto.com.zip.test pode 016.000-23421/1234-1 ser necessário procurar por uma lista de e-mails tom@abc.com and harry@zyx.com";
-
+				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}.\\d{1})*";
+		
 		Pattern pattern = Pattern.compile(regex);
 
         Matcher matcher = pattern.matcher(text);
@@ -81,42 +63,84 @@ public class ExtractText {
         		portaria = matcher.group();
         		break;
         	}
-        	//listaEmail += matcher.group() + " ";
         }
-        System.out.println(portaria);
 		return portaria;
 	}
 	
-	public static LocalDate regexDate() {
-		//text = "geh jhf 12/12/2012 rgegrht";
+	public static LocalDate getDate() {
 		String regex = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((?:19|20)[0-9][0-9])";
-		System.out.println(regex);
-		//String text = "Em um texto 123.456.65432/1234-12 grande mary@xpto.com.zip.test pode 016.000-23421/1234-1 ser necessário procurar por uma lista de e-mails tom@abc.com and harry@zyx.com";
-
+		
 		Pattern pattern = Pattern.compile(regex);
 
         Matcher matcher = pattern.matcher(text);
 
-        String date = "";
-        //ArrayList<String> date = new ArrayList<String>();
+        String date, finalDate = "";
+        int year, lastYear = 0;
+        int month, lastMonth = 0;
+        int day, lastDay = 0;
 
         while (matcher.find()) {
-        	if (matcher.group().contains("/")) {
-        		date = matcher.group();
-        		break;
+        	date = matcher.group().trim();
+        	
+        	if (!date.isEmpty()) {
+        		year = Integer.parseInt(date.split("/")[2]);
+        		month = Integer.parseInt(date.split("/")[1]);
+        		day = Integer.parseInt(date.split("/")[0]);
+        		if (year > lastYear) {
+        			lastYear = year;
+        			finalDate = date;
+        		} else if (year == lastYear) {
+        			if (month > lastMonth) {
+        				lastMonth = month;
+        				finalDate = date;
+        			} else if (month == lastMonth) {
+        				if (day > lastDay) {
+        					lastDay = day;
+        					finalDate = date;
+        				}
+        			}
+        		}
         	}
-        	//listaEmail += matcher.group() + " ";
         }
         
-        System.out.println("---> " + date);
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-        //convert String to LocalDate
-        LocalDate localDate = LocalDate.parse(date, formatter);
-		return localDate;
+        if (!finalDate.isEmpty()) {
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	        LocalDate localDate = LocalDate.parse(finalDate, formatter);
+	        return localDate;
+        }
+        return null;
 	}
 	
-	public static String getPortaria() {
-		return null;
+	public static String getTypeDoc() {
+		String regex = "";
+		String[] typeDocs = DocumentType.types();
+		
+		for (int i = 1; i < typeDocs.length; i++) {
+			regex = regex + " | " + typeDocs[i].toLowerCase();
+		}
+		regex = "(" + regex.substring(3) + ")*";
+		
+		Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(text);
+        
+        String typeDoc = "";
+        
+        while (matcher.find()) {
+        	typeDoc = matcher.group();
+        	if (!typeDoc.isEmpty()) {
+        		break;
+        	}
+        }
+        
+        int indexTypeDoc = -1;
+        for (int i = 1; i < typeDocs.length; i++) {
+			if (typeDoc.trim().equals(typeDocs[i].toLowerCase())) {
+				indexTypeDoc = i;
+				break;
+			}
+		}
+        
+		return indexTypeDoc != -1 ? typeDocs[indexTypeDoc] : "";
 	}
+	
 }

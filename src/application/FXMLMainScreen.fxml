@@ -17,6 +17,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import widgets.MaskField?>
 
 <VBox prefHeight="670.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FXMLMainScreenController">
    <children>
@@ -56,7 +57,7 @@
           <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <children>
                   <DatePicker fx:id="date" layoutX="17.0" layoutY="77.0" prefHeight="25.0" prefWidth="145.0" promptText="Data" />
-                  <TextField fx:id="portariaEdoc" layoutX="15.0" layoutY="125.0" promptText="Portaria / E-DOC" />
+                  <MaskField fx:id="portariaEdoc" layoutX="15.0" layoutY="125.0" promptText="Portaria / E-DOC" mask="DDD.DDD.DDDDD/DDDD-D" />
                   <ComboBox fx:id="typeDoc" layoutX="12.0" layoutY="276.0" onAction="#typeDoc" prefHeight="25.0" prefWidth="201.0" />
                   <ComboBox fx:id="subTypeDoc" layoutX="12.0" layoutY="322.0" prefHeight="25.0" prefWidth="201.0" />
                   <Button layoutX="40.0" layoutY="598.0" mnemonicParsing="false" onAction="#organize" prefHeight="25.0" prefWidth="150.0" text="Organizar" />
