@@ -21,6 +21,7 @@ public class Main extends Application {
 			
 			primaryStage.setTitle("Organizador de documentos digitalizados");
 			//primaryStage.setMaximized(true);
+			
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {

@@ -56,8 +56,13 @@ public class MoveFile {
 		}
 	}
 	
-	public void setData(LocalDate date, String portariaEdoc, String docType, String portariaPage) {
-		folderName = date.getYear() + "." + String.format("%02d" , date.getMonthValue()) + "." + date.getDayOfMonth() + " " + portariaEdoc;
+	public void setData(LocalDate date, String portariaEdoc, String comuInt, String docType, String portariaPage) {
+		if (!portariaEdoc.isEmpty())
+			portariaEdoc = " " + portariaEdoc;
+		if (!comuInt.isEmpty())
+			comuInt = " " + comuInt;
+		
+		folderName = date.getYear() + "." + String.format("%02d" , date.getMonthValue()) + "." + String.format("%02d" , date.getDayOfMonth()) + portariaEdoc + comuInt;
 		fileName = docType;
 		if (!portariaPage.isEmpty()) {
 			String[] result = portariaPage.split(",");

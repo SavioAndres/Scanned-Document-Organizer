@@ -15,6 +15,7 @@ import net.sourceforge.tess4j.TesseractException;
 public class ExtractText {
 	
 	private static String text;
+	private static String originalText = "";
 	
 	public static void readImage(File imageFile) throws IOException {
 		
@@ -35,6 +36,7 @@ public class ExtractText {
             long dif = System.currentTimeMillis() - tempoInicio;
     		System.out.println("Tempo Total: "+(String.format("%02d segundos  e %02d milisegundos", dif/1000, dif%1000)));
     		
+    		originalText = result;
             text = result.toLowerCase().replace("\n", " ");
         } catch (TesseractException e) {
             e.getMessage();
@@ -43,6 +45,10 @@ public class ExtractText {
 	
 	public static String getText() {
 		return text;
+	}
+	
+	public static String getOriginalText() {
+		return originalText;
 	}
 	
 	public static String getPortaria() {
