@@ -9,6 +9,8 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import auto_detect_data.BackgroundSystem;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -128,8 +130,23 @@ public class FXMLMainScreenController implements Initializable {
 	private void openDirectory(ActionEvent event) {
 		
 		try {
+			imageView.setFitWidth(668);
+			imageLoad.setVisible(true);
 			directory = openDirectory.open();
-			
+			fileImages = SeparateBlackSheet.files();
+			totalPages.setText(fileImages.size() + "");
+			autocomplete();
+			background.setDisable(false);
+			date.requestFocus();
+			Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
+			imageView.setImage(openDirectory.image(indexImage));
+			folderName.setText(directory.getName());
+			imageName.setText(fileImages.get(0).getName());
+			numberPage.setText((indexImage + 1) + "");
+			btnOpenFolder.setVisible(false);
+			menu.setVisible(true);
+			background.setVisible(true);
+			imageLoad.setVisible(false);
 			
 			
 		} catch (Exception e) {
@@ -137,32 +154,14 @@ public class FXMLMainScreenController implements Initializable {
 		}
 		
 		// RemoveWhiteSheet.start();
-		imageView.setFitWidth(668);
-		imageLoad.setVisible(true);
-		new Thread(load).start();
-		imageLoad.setVisible(false);
+		
+		//new Thread(load).start();
+		
 	}
 	
 	private Runnable load = new Runnable() {
 		public void run() {
-			try {
-				fileImages = SeparateBlackSheet.files();
-				totalPages.setText(fileImages.size() + "");
-				autocomplete();
-				background.setDisable(false);
-				date.requestFocus();
-				Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
-				imageView.setImage(openDirectory.image(indexImage));
-				folderName.setText(directory.getName());
-				imageName.setText(fileImages.get(0).getName());
-				numberPage.setText((indexImage + 1) + "");
-				btnOpenFolder.setVisible(false);
-				menu.setVisible(true);
-				background.setVisible(true);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 		}
 	};
 
@@ -364,15 +363,19 @@ public class FXMLMainScreenController implements Initializable {
 
 	private void autocomplete() throws IOException {
 		if (autoDetection.isSelected()) {
-			ExtractText.readImage(fileImages.get(0));
-			System.out.println("tamanho: " + fileImages.size() + " - List: " + fileImages.toString());
-			System.out.println(ExtractText.getText());
-			portariaEdoc.setText(ExtractText.getPortaria());
-			System.out.println(">>> " + ExtractText.getPortaria());
-			typeDoc.setValue(ExtractText.getTypeDoc());
-			System.out.println(">>>> " + ExtractText.getTypeDoc());
-			date.setValue(ExtractText.getDate());
-			System.out.println(">>>>> " + ExtractText.getDate());
+			BackgroundSystem backgroundSystem = new BackgroundSystem(directory);
+			new Thread(backgroundSystem).start();
+			System.out.println(backgroundSystem.getOriginalText());
+			
+			//ExtractText.readImage(fileImages.get(0));
+			//System.out.println("tamanho: " + fileImages.size() + " - List: " + fileImages.toString());
+			//System.out.println(ExtractText.getText());
+			//portariaEdoc.setText(ExtractText.getPortaria());
+			//System.out.println(">>> " + ExtractText.getPortaria());
+			//typeDoc.setValue(ExtractText.getTypeDoc());
+			//System.out.println(">>>> " + ExtractText.getTypeDoc());
+			//date.setValue(ExtractText.getDate());
+			//System.out.println(">>>>> " + ExtractText.getDate());
 		}
 	}
 

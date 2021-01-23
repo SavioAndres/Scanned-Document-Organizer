@@ -1,70 +1,68 @@
-package organize_files;
+package auto_detect_data;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import organize_files.DocumentType;
 
 public class ExtractText {
 	
-	private static String text;
-	private static String originalText = "";
-	private static File imageFile;
+	private ITesseract instance;
+	private ArrayList<DocumentInformation> dataExtractedText;
+	private ArrayList<String> originalText;
 	
-	public static void readImage(File imageFiles) throws IOException {
-		imageFile = imageFiles;
-		new Thread(load).start();
-		
+	public ExtractText() {
+		instance = new Tesseract();
+        
+        instance.setDatapath("C:\\Users\\savio\\Projects\\Java\\Scanned-Document-Organizer\\tessdata"); // path to tessdata directory
+        instance.setLanguage("por");
+        
+        dataExtractedText = new ArrayList<DocumentInformation>();
+		originalText = new ArrayList<String>();
 	}
 	
-	private static Runnable load = new Runnable() {
-
-		
-		public void run() {
-			long tempoInicio = System.currentTimeMillis();
-			
-			
-	        ITesseract instance = new Tesseract();
-	        
-	        instance.setDatapath("C:\\Users\\savio\\Projects\\Java\\Scanned-Document-Organizer\\tessdata"); // path to tessdata directory
-	        instance.setLanguage("por");
-
-	        try {
-			    //BufferedImage image = ResizeImage.resize(imageFile, 2);
-	        	BufferedImage image = ImageIO.read(imageFile);
-				
-	            String result = instance.doOCR(image);
-	            
-	            long dif = System.currentTimeMillis() - tempoInicio;
-	    		System.out.println("Tempo Total: "+(String.format("%02d segundos  e %02d milisegundos", dif/1000, dif%1000)));
-	    		
-	    		originalText = result;
-	            text = result.toLowerCase().replace("\n", " ");
-	        } catch (TesseractException e) {
-	            e.getMessage();
-	        } catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	};
-	
-	public static String getText() {
-		return text;
+	public ArrayList<DocumentInformation> getDataText() {
+		return dataExtractedText;
 	}
 	
-	public static String getOriginalText() {
+	public ArrayList<String> getOriginalText() {
 		return originalText;
 	}
 	
-	public static String getPortaria() {
+	public void readImage(ArrayList<File> imageFile) throws IOException, TesseractException {
+		String result;
+		
+		for (int i = 0; i < imageFile.size(); i++) {
+			BufferedImage image = ImageIO.read(imageFile.get(i));
+			
+			result = instance.doOCR(image);
+            
+			originalText.add(result);
+			
+			dataExtracted(result.toLowerCase().replace("\n", " "));
+		}
+		
+	}
+	
+	private void dataExtracted(String text) {
+		DocumentInformation docInfo = new DocumentInformation();
+		docInfo.setProtocolo(getProtocolo(text));
+		docInfo.setData(getDate(text));
+		docInfo.setTipoDocumento(getTypeDoc(text));
+		
+		dataExtractedText.add(docInfo);
+	}
+	
+	private String getProtocolo(String text) {
 		String regex = "(\\d{6}.\\d{5}/\\d{4}.\\d{1} | "
 				+ "\\d{6}.\\d{5}/\\d{4}-\\d{1} | "
 				+ "\\d{3}.\\d{3}-\\d{5}/\\d{4}-\\d{1} | "
@@ -75,18 +73,18 @@ public class ExtractText {
 
         Matcher matcher = pattern.matcher(text);
 
-        String portaria = "";
+        String protocolo = "";
 
         while (matcher.find()) {
         	if (matcher.group().contains(".")) {
-        		portaria = matcher.group();
+        		protocolo = matcher.group();
         		break;
         	}
         }
-		return portaria;
+		return protocolo;
 	}
 	
-	public static LocalDate getDate() {
+	private LocalDate getDate(String text) {
 		String regex = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((?:19|20)[0-9][0-9])";
 		
 		Pattern pattern = Pattern.compile(regex);
@@ -130,7 +128,7 @@ public class ExtractText {
         return null;
 	}
 	
-	public static String getTypeDoc() {
+	private String getTypeDoc(String text) {
 		String regex = "";
 		String[] typeDocs = DocumentType.types();
 		
