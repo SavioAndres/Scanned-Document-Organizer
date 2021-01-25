@@ -5,12 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
-
-import application.MainScreenController;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -18,52 +15,40 @@ import organize_files.DocumentType;
 
 public class ExtractText {
 
-	private static ITesseract instance;
+	private ITesseract instance;
 
 	public ExtractText() {
 		instance = new Tesseract();
 
-		instance.setDatapath("C:\\Users\\savio\\Projects\\Java\\Scanned-Document-Organizer\\resources\\tessdata");
-		// // path to tessdata directory
-		//instance.setDatapath(getClass().getResourceAsStream("/tessdata").toString());
-
+		try {
+			instance.setDatapath(new File(".").getCanonicalPath() + "/tessdata");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		instance.setLanguage("por");
 	}
 
-	public static void readImage(File imageFile) throws IOException, TesseractException {
-		
-		instance = new Tesseract();
+	public DocumentInformation readImage(File imageFile) throws IOException, TesseractException {
 
-		instance.setDatapath("C:\\Users\\savio\\Projects\\Java\\Scanned-Document-Organizer\\resources\\tessdata");
-		// // path to tessdata directory
-		//instance.setDatapath(getClass().getResourceAsStream("/tessdata").toString());
+		BufferedImage image = ImageIO.read(imageFile);
 
-		instance.setLanguage("por");
-		String result;
-		DocumentInformation resultInfo;
-
-		//for (int i = 0; i < imageFile.size(); i++) {
-			BufferedImage image = ImageIO.read(imageFile);
-
-			result = instance.doOCR(image);
-			resultInfo = dataExtracted(result.toLowerCase().replace("\n", " "));
-
-			MainScreenController.texts.add(result);
-			// MainScreenController.originalText.add(result);
-		//}
-
+		return dataExtracted(instance.doOCR(image));
 	}
 
-	private static DocumentInformation dataExtracted(String text) {
+	private DocumentInformation dataExtracted(String text) {
+		String cleanText = text.toLowerCase().replace("\n", " ");
+
 		DocumentInformation docInfo = new DocumentInformation();
-		docInfo.setProtocolo(getProtocolo(text));
-		docInfo.setData(getDate(text));
-		docInfo.setTipoDocumento(getTypeDoc(text));
+		docInfo.setProtocolo(getProtocolo(cleanText));
+		docInfo.setData(getDate(cleanText));
+		docInfo.setTipoDocumento(getTypeDoc(cleanText));
+		docInfo.setOriginalText(text);
 
 		return docInfo;
 	}
 
-	private static String getProtocolo(String text) {
+	private String getProtocolo(String text) {
 		String regex = "(\\d{6}.\\d{5}/\\d{4}.\\d{1} | " + "\\d{6}.\\d{5}/\\d{4}-\\d{1} | "
 				+ "\\d{3}.\\d{3}-\\d{5}/\\d{4}-\\d{1} | " + "\\d{3}.\\d{3}.\\d{5}/\\d{4}-\\d{1} | "
 				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}.\\d{1})*";
@@ -80,10 +65,10 @@ public class ExtractText {
 				break;
 			}
 		}
-		return protocolo;
+		return protocolo.replace("-", ".").replace("/", ".").trim();
 	}
 
-	private static LocalDate getDate(String text) {
+	private LocalDate getDate(String text) {
 		String regex = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((?:19|20)[0-9][0-9])";
 
 		Pattern pattern = Pattern.compile(regex);
@@ -127,7 +112,7 @@ public class ExtractText {
 		return null;
 	}
 
-	private static String getTypeDoc(String text) {
+	private String getTypeDoc(String text) {
 		String regex = "";
 		String[] typeDocs = DocumentType.types();
 

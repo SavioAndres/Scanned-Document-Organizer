@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.ResourceBundle;
 import auto_detect_data.BackgroundSystem;
+import auto_detect_data.DocumentInformation;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -22,7 +24,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -36,8 +37,9 @@ public class MainScreenController implements Initializable {
 
 	public static File directory;
 	public static ArrayList<File> fileImages;
-	public static ArrayList<String> texts = new ArrayList<String>();
+	public static Hashtable<String, DocumentInformation> dataInfo;
 	private int indexImage = 0;
+	private String firstPageName;
 
 	@FXML
 	private CheckMenuItem menu_autoDetection;
@@ -97,10 +99,11 @@ public class MainScreenController implements Initializable {
 			directory = OpenDirectory.open();
 			Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
 			startScreen();
+			autocomplete();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
+
 	}
 
 	@FXML
@@ -122,36 +125,37 @@ public class MainScreenController implements Initializable {
 						cb_typeDoc.getValue(), tf_portariaPage.getText());
 			}
 			moveFile.MoveFiles(fileImages);
-			
+
 			startScreen();
+			autoFill();
 		}
 	}
-	
+
 	private void startScreen() {
 		try {
 			fileImages = SeparateBlackSheet.files();
 			indexImage = 0;
+			firstPageName = fileImages.get(0).getName();
 			imageView.setImage(OpenDirectory.image(fileImages.get(0)));
-			
+
 			btn_organize.setDisable(false);
 			btn_firstPage.setDisable(true);
 			btn_previousImage.setDisable(true);
 			btn_lastPage.setDisable(false);
 			btn_nextImage.setDisable(false);
-			
+
 			dp_date.requestFocus();
 			lb_totalPages.setText(fileImages.size() + "");
 			hl_folderName.setText(directory.getName());
 			hl_imageName.setText(fileImages.get(0).getName());
 			lb_numberPage.setText("1");
 			dp_date.setValue(null);
-			
+
 			tf_protocoloEdoc.setText("");
+			tf_comuInt.setText("");
 			cb_typeDoc.setValue("");
 			cb_subTypeDoc.setValue("");
 			tf_portariaPage.setText("");
-			
-			autocomplete();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -164,13 +168,11 @@ public class MainScreenController implements Initializable {
 		alert.setTitle("Information Dialog");
 		alert.setHeaderText(null);
 
-		/*
-		 * if (ExtractText.getOriginalText().isEmpty())
-		 * alert.setContentText("Não há texto extraído!"); else
-		 * alert.setContentText(ExtractText.getOriginalText());
-		 * 
-		 * alert.showAndWait();
-		 */
+		// alert.setContentText("Não há texto extraído!");
+
+		alert.setContentText(dataInfo.get(firstPageName).getOriginalText());
+
+		alert.showAndWait();
 	}
 
 	@FXML
@@ -296,14 +298,19 @@ public class MainScreenController implements Initializable {
 
 	private void autocomplete() throws IOException {
 		if (menu_autoDetection.isSelected()) {
+			dataInfo = new Hashtable<String, DocumentInformation>();
 			new Thread(new BackgroundSystem(directory)).start();
-
 		}
 	}
-	
-	@FXML
-	private void ver(ActionEvent event) {
-		System.out.println(texts);
+
+	private void autoFill() {
+		if (menu_autoDetection.isSelected()) {
+			DocumentInformation docInfo = dataInfo.get(firstPageName);
+
+			dp_date.setValue(docInfo.getData());
+			tf_protocoloEdoc.setText(docInfo.getProtocolo());
+			cb_typeDoc.setValue(docInfo.getTipoDocumento());
+		}
 	}
 
 }

@@ -14,8 +14,6 @@ public class OpenDirectory {
 
 	public static File open() {
 		DirectoryChooser chooser = new DirectoryChooser();
-		// chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images",
-		// "*.jpg", "*.png"));
 		File directory = chooser.showDialog(Main.stage);
 		return directory;
 	}

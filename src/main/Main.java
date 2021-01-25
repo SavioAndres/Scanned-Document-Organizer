@@ -15,8 +15,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			stage = primaryStage;
-			
-			Pane root = FXMLLoader.load(getClass().getResource("/application/MainScreen.fxml")); ///src/application/MainScreen.fxml
+
+			Pane root = FXMLLoader.load(getClass().getResource("/application/MainScreen.fxml")); // /src/application/MainScreen.fxml
 			Scene scene = new Scene(root);
 
 			primaryStage.setTitle("Organizador de documentos digitalizados");

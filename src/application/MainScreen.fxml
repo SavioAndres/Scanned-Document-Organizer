@@ -19,25 +19,34 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="670.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainScreenController">
+<VBox prefHeight="670.0" prefWidth="940.0"
+	xmlns="http://javafx.com/javafx/11.0.1"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="application.MainScreenController">
 	<children>
 		<MenuBar>
 			<menus>
 				<Menu mnemonicParsing="false" text="Documento">
 					<items>
-						<MenuItem mnemonicParsing="false" onAction="#openDirectory" text="Abrir Pasta">
+						<MenuItem mnemonicParsing="false"
+							onAction="#openDirectory" text="Abrir Pasta">
 							<accelerator>
-								<KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+								<KeyCodeCombination alt="UP" code="O"
+									control="DOWN" meta="UP" shift="UP" shortcut="UP" />
 							</accelerator>
 						</MenuItem>
-						<CheckMenuItem fx:id="menu_autoDetection" mnemonicParsing="false" selected="true" text="Auto Detectar">
+						<CheckMenuItem fx:id="menu_autoDetection"
+							mnemonicParsing="false" selected="true" text="Auto Detectar">
 							<accelerator>
-								<KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+								<KeyCodeCombination alt="UP" code="A"
+									control="DOWN" meta="UP" shift="UP" shortcut="UP" />
 							</accelerator>
 						</CheckMenuItem>
-						<MenuItem mnemonicParsing="false" onAction="#showExtractedText" text="Texto Extraído">
+						<MenuItem mnemonicParsing="false"
+							onAction="#showExtractedText" text="Texto Extraído">
 							<accelerator>
-								<KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+								<KeyCodeCombination alt="UP" code="T"
+									control="DOWN" meta="UP" shift="UP" shortcut="UP" />
 							</accelerator>
 						</MenuItem>
 					</items>
@@ -50,59 +59,102 @@
 				</Menu>
 			</menus>
 		</MenuBar>
-		<SplitPane dividerPositions="0.75" prefHeight="646.0" prefWidth="900.0">
+		<SplitPane dividerPositions="0.75" prefHeight="646.0"
+			prefWidth="900.0">
 			<items>
 				<AnchorPane>
 					<children>
-						<ScrollPane pannable="true" prefHeight="587.0" prefWidth="537.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+						<ScrollPane pannable="true" prefHeight="587.0"
+							prefWidth="537.0" AnchorPane.bottomAnchor="57.0"
+							AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+							AnchorPane.topAnchor="0.0">
 							<content>
-								<ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" />
+								<ImageView fx:id="imageView" pickOnBounds="true"
+									preserveRatio="true" />
 							</content>
 						</ScrollPane>
-						<AnchorPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="586.0">
+						<AnchorPane prefHeight="200.0" prefWidth="200.0"
+							AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+							AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="586.0">
 							<children>
-								<Button fx:id="btn_firstPage" layoutX="241.0" layoutY="17.0" mnemonicParsing="false" onAction="#firstPage" text="Primeira" AnchorPane.bottomAnchor="16.0" />
-								<Button fx:id="btn_nextImage" layoutX="354.0" layoutY="17.0" mnemonicParsing="false" onAction="#nextImage" prefHeight="25.0" prefWidth="31.0" text="&gt;" AnchorPane.bottomAnchor="16.0" />
-								<Button fx:id="btn_previousImage" layoutX="317.0" layoutY="17.0" mnemonicParsing="false" onAction="#previousImage" prefHeight="25.0" prefWidth="31.0" text="&lt;" AnchorPane.bottomAnchor="16.0" />
-								<Button fx:id="btn_lastPage" layoutX="400.0" layoutY="17.0" mnemonicParsing="false" onAction="#lastPage" prefHeight="25.0" prefWidth="60.0" text="Última" AnchorPane.bottomAnchor="16.0" />
-								<Slider fx:id="slider_zoom" layoutX="22.0" layoutY="35.0" prefHeight="14.0" prefWidth="192.0" AnchorPane.bottomAnchor="9.0" />
+								<Button fx:id="btn_firstPage" layoutX="241.0"
+									layoutY="17.0" mnemonicParsing="false" onAction="#firstPage"
+									text="Primeira" AnchorPane.bottomAnchor="16.0" />
+								<Button fx:id="btn_nextImage" layoutX="354.0"
+									layoutY="17.0" mnemonicParsing="false" onAction="#nextImage"
+									prefHeight="25.0" prefWidth="31.0" text="&gt;"
+									AnchorPane.bottomAnchor="16.0" />
+								<Button fx:id="btn_previousImage" layoutX="317.0"
+									layoutY="17.0" mnemonicParsing="false"
+									onAction="#previousImage" prefHeight="25.0" prefWidth="31.0"
+									text="&lt;" AnchorPane.bottomAnchor="16.0" />
+								<Button fx:id="btn_lastPage" layoutX="400.0"
+									layoutY="17.0" mnemonicParsing="false" onAction="#lastPage"
+									prefHeight="25.0" prefWidth="60.0" text="Última"
+									AnchorPane.bottomAnchor="16.0" />
+								<Slider fx:id="slider_zoom" layoutX="22.0" layoutY="35.0"
+									prefHeight="14.0" prefWidth="192.0"
+									AnchorPane.bottomAnchor="9.0" />
 							</children>
 						</AnchorPane>
 					</children>
 				</AnchorPane>
 				<AnchorPane>
 					<children>
-						<DatePicker fx:id="dp_date" layoutX="14.0" layoutY="161.0" prefHeight="25.0" prefWidth="201.0" promptText="Data" />
-						<TextField fx:id="tf_protocoloEdoc" layoutX="15.0" layoutY="212.0" prefHeight="25.0" prefWidth="201.0" promptText="Protocolo / E-DOC" />
-						<ComboBox fx:id="cb_typeDoc" layoutX="15.0" layoutY="318.0" onAction="#typeDoc" prefHeight="25.0" prefWidth="201.0" />
-						<ComboBox fx:id="cb_subTypeDoc" layoutX="15.0" layoutY="353.0" prefHeight="25.0" prefWidth="201.0" />
-						<TextField fx:id="tf_portariaPage" layoutX="16.0" layoutY="444.0" prefHeight="25.0" prefWidth="201.0" promptText="Portarias; exemplo: 2, 5, 7" />
-						<Button fx:id="btn_organize" defaultButton="true" layoutX="40.0" layoutY="592.0" mnemonicParsing="false" onAction="#organize" prefHeight="31.0" prefWidth="150.0" text="Organizar" />
+						<DatePicker fx:id="dp_date" layoutX="14.0"
+							layoutY="161.0" prefHeight="25.0" prefWidth="201.0"
+							promptText="Data. Ex 25/01/2021" />
+						<TextField fx:id="tf_protocoloEdoc" layoutX="15.0"
+							layoutY="212.0" prefHeight="25.0" prefWidth="201.0"
+							promptText="Protocolo. Ex 016.000.12345.2021.1" />
+						<ComboBox fx:id="cb_typeDoc" layoutX="15.0"
+							layoutY="318.0" onAction="#typeDoc" prefHeight="25.0"
+							prefWidth="201.0" />
+						<ComboBox fx:id="cb_subTypeDoc" layoutX="15.0"
+							layoutY="353.0" prefHeight="25.0" prefWidth="201.0" />
+						<TextField fx:id="tf_portariaPage" layoutX="16.0"
+							layoutY="444.0" prefHeight="25.0" prefWidth="201.0"
+							promptText="Portarias; exemplo: 2, 5, 7" />
+						<Button fx:id="btn_organize" defaultButton="true"
+							layoutX="40.0" layoutY="592.0" mnemonicParsing="false"
+							onAction="#organize" prefHeight="31.0" prefWidth="150.0"
+							text="Organizar" />
 						<Label layoutX="14.0" layoutY="67.0" text="Pasta:" />
 						<Label layoutX="14.0" layoutY="84.0" text="Imagem:" />
-						<Hyperlink fx:id="hl_folderName" layoutX="82.0" layoutY="64.0" onAction="#linkFolderName" text="..." />
-						<Hyperlink fx:id="hl_imageName" layoutX="82.0" layoutY="81.0" onAction="#linkImageName" text="..." />
-						<Label layoutX="16.0" layoutY="406.0" text="Páginas que são portarias:" />
-						<Label layoutX="14.0" layoutY="13.0" prefHeight="20.0" prefWidth="88.0" text="Nº da página:">
+						<Hyperlink fx:id="hl_folderName" layoutX="82.0"
+							layoutY="64.0" onAction="#linkFolderName" text="..." />
+						<Hyperlink fx:id="hl_imageName" layoutX="82.0"
+							layoutY="81.0" onAction="#linkImageName" text="..." />
+						<Label layoutX="16.0" layoutY="406.0"
+							text="Páginas que são portarias:" />
+						<Label layoutX="14.0" layoutY="13.0" prefHeight="20.0"
+							prefWidth="88.0" text="Nº da página:">
 							<font>
 								<Font size="14.0" />
 							</font>
 						</Label>
-						<Label fx:id="lb_numberPage" layoutX="115.0" layoutY="13.0" text="...">
+						<Label fx:id="lb_numberPage" layoutX="115.0" layoutY="13.0"
+							text="...">
 							<font>
 								<Font size="14.0" />
 							</font>
 						</Label>
-						<Label layoutX="14.0" layoutY="35.0" text="Total de páginas:" textFill="#787878" />
-						<Label fx:id="lb_totalPages" layoutX="116.0" layoutY="35.0" text="..." textFill="#787878" />
-						<Label layoutX="16.0" layoutY="290.0" text="Tipo de documento:" />
-						<Label layoutX="16.0" layoutY="423.0" text="Separe os números das páginas com vírgula" textFill="#787878">
+						<Label layoutX="14.0" layoutY="35.0"
+							text="Total de páginas:" textFill="#787878" />
+						<Label fx:id="lb_totalPages" layoutX="116.0" layoutY="35.0"
+							text="..." textFill="#787878" />
+						<Label layoutX="16.0" layoutY="290.0"
+							text="Tipo de documento:" />
+						<Label layoutX="16.0" layoutY="423.0"
+							text="Separe os números das páginas com vírgula"
+							textFill="#787878">
 							<font>
 								<Font size="9.0" />
 							</font>
 						</Label>
-						<TextField fx:id="tf_comuInt" layoutX="14.0" layoutY="246.0" prefHeight="25.0" prefWidth="201.0" promptText="Comunicação Interna" />
-                  <Button layoutX="32.0" layoutY="113.0" mnemonicParsing="false" onAction="#ver" text="Button" />
+						<TextField fx:id="tf_comuInt" layoutX="14.0"
+							layoutY="246.0" prefHeight="25.0" prefWidth="201.0"
+							promptText="Comunicação Interna. Ex 0012.2021" />
 					</children>
 				</AnchorPane>
 			</items>

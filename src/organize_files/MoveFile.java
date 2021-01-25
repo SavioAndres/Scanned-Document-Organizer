@@ -26,8 +26,6 @@ public class MoveFile {
 		for (int i = 0; i < fileImages.size(); i++) {
 			file = fileImages.get(i);
 			if (file.isFile()) {
-				// System.out.println(directory.getAbsolutePath() + " -- " +
-				// fileImages.get(i).getName());
 				String port = "";
 				if (portariaPages != null)
 					if (portariaPages.contains(i + 1))

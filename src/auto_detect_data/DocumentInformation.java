@@ -6,6 +6,7 @@ public class DocumentInformation {
 	private LocalDate data;
 	private String protocolo;
 	private String tipoDocumento;
+	private String originalText;
 
 	public LocalDate getData() {
 		return data;
@@ -29,6 +30,14 @@ public class DocumentInformation {
 
 	public void setTipoDocumento(String tipoDocumento) {
 		this.tipoDocumento = tipoDocumento;
+	}
+
+	public String getOriginalText() {
+		return originalText;
+	}
+
+	public void setOriginalText(String originalText) {
+		this.originalText = originalText;
 	}
 
 }

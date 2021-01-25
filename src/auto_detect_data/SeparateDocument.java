@@ -4,9 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import application.MainScreenController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import net.sourceforge.tess4j.TesseractException;
@@ -19,7 +19,6 @@ public class SeparateDocument {
 		File[] files = directory.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				System.out.println(dir);
 				return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png");
 			}
 		});
@@ -50,6 +49,7 @@ public class SeparateDocument {
 		});
 
 		BufferedImage img = null;
+		ExtractText extractText = new ExtractText();
 
 		int size = files.length;
 		try {
@@ -58,9 +58,10 @@ public class SeparateDocument {
 					img = ResizeImage.resize(files[i], 3);
 
 					if (isBlackPage(img) && files[i + 1].exists()) {
-						//selectedFiles.add(files[i + 1]);
+						// selectedFiles.add(files[i + 1]);
 						try {
-							ExtractText.readImage(files[i + 1]);
+							MainScreenController.dataInfo.put(files[i + 1].getName(),
+									extractText.readImage(files[i + 1]));
 						} catch (TesseractException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
