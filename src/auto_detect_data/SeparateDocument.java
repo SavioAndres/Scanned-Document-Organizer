@@ -57,11 +57,11 @@ public class SeparateDocument {
 				if (files[i].isFile()) {
 					img = ResizeImage.resize(files[i], 3);
 
-					if (isBlackPage(img) && files[i + 1].exists()) {
-						// selectedFiles.add(files[i + 1]);
+					if (isBlackPage(img) && i + 2 < size) {
 						try {
-							MainScreenController.dataInfo.put(files[i + 1].getName(),
-									extractText.readImage(files[i + 1]));
+							MainScreenController.dataInfo.put(files[i + 2].getName(),
+									extractText.readImage(files[i + 2]));
+							i++;
 						} catch (TesseractException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -95,6 +95,6 @@ public class SeparateDocument {
 
 		sum /= img.getWidth() * img.getHeight();
 
-		return sum < 0.001;
+		return sum < 0.9;
 	}
 }

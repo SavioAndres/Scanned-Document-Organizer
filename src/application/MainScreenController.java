@@ -134,28 +134,49 @@ public class MainScreenController implements Initializable {
 	private void startScreen() {
 		try {
 			fileImages = SeparateBlackSheet.files();
-			indexImage = 0;
-			firstPageName = fileImages.get(0).getName();
-			imageView.setImage(OpenDirectory.image(fileImages.get(0)));
-
-			btn_organize.setDisable(false);
-			btn_firstPage.setDisable(true);
-			btn_previousImage.setDisable(true);
-			btn_lastPage.setDisable(false);
-			btn_nextImage.setDisable(false);
-
-			dp_date.requestFocus();
-			lb_totalPages.setText(fileImages.size() + "");
-			hl_folderName.setText(directory.getName());
-			hl_imageName.setText(fileImages.get(0).getName());
-			lb_numberPage.setText("1");
-			dp_date.setValue(null);
-
-			tf_protocoloEdoc.setText("");
-			tf_comuInt.setText("");
-			cb_typeDoc.setValue("");
-			cb_subTypeDoc.setValue("");
-			tf_portariaPage.setText("");
+			if (fileImages != null) {
+				indexImage = 0;
+				firstPageName = fileImages.get(0).getName();
+				imageView.setImage(OpenDirectory.image(fileImages.get(0)));
+	
+				btn_organize.setDisable(false);
+				btn_firstPage.setDisable(true);
+				btn_previousImage.setDisable(true);
+				btn_lastPage.setDisable(false);
+				btn_nextImage.setDisable(false);
+	
+				dp_date.requestFocus();
+				lb_totalPages.setText(fileImages.size() + "");
+				hl_folderName.setText(directory.getName());
+				hl_imageName.setText(fileImages.get(0).getName());
+				lb_numberPage.setText("1");
+				dp_date.setValue(null);
+	
+				tf_protocoloEdoc.setText("");
+				tf_comuInt.setText("");
+				cb_typeDoc.setValue("");
+				cb_subTypeDoc.setValue("");
+				tf_portariaPage.setText("");
+			} else {
+				imageView.setImage(null);
+				btn_organize.setDisable(true);
+				btn_firstPage.setDisable(true);
+				btn_previousImage.setDisable(true);
+				btn_lastPage.setDisable(true);
+				btn_nextImage.setDisable(true);
+				
+				lb_totalPages.setText("...");
+				hl_folderName.setText("...");
+				hl_imageName.setText("...");
+				lb_numberPage.setText("..");
+				dp_date.setValue(null);
+				
+				tf_protocoloEdoc.setText("");
+				tf_comuInt.setText("");
+				cb_typeDoc.setValue("");
+				cb_subTypeDoc.setValue("");
+				tf_portariaPage.setText("");
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

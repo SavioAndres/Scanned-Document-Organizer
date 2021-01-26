@@ -36,11 +36,11 @@ public class MoveFile {
 					String fileNewName = port + fileName + " " + timestamp.getTime() + i + "."
 							+ file.getName().substring(file.getName().lastIndexOf(".") + 1);
 
-					if (i == fileImages.size() - 1) {
+					if (i == fileImages.size() - 1 || i == fileImages.size() - 2) {
 						newDirectory = new File(directory.getAbsolutePath() + "\\pretas");
 						if (!newDirectory.exists())
 							newDirectory.mkdir();
-						fileNewName = folderName + " " + fileName + " " + timestamp.getTime() + "."
+						fileNewName = folderName + " " + fileName + " " + timestamp.getTime() + i + "."
 								+ file.getName().substring(file.getName().lastIndexOf(".") + 1);
 					}
 
