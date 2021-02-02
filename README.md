@@ -1,0 +1,16 @@
+# Tela
+![Tele](https://uploaddeimagens.com.br/images/003/059/794/full/image.png)
+
+# Funções
+- Auto deteção da data, protocolo e tipo de documento
+- Visualização das páginas do documento
+- Total de páginas do documento
+- Número da página atual
+- Link para página
+- Link para visualizar a página no programa padrão do SO
+- Zoom nas páginas
+- Tipos de documentos organizados de forma a facilitar a escolha
+- Classificação de Portarias por número de página
+
+# Auto detecção
+A auto detecção é realizada a partir do segundo documento, pois para que o Regex encontre a data, protocolo e tipo do documento é realizado uma extração do texto da primeira página de cada documento. Para realizar uma auto detecão rápida, foi utilizado thread para que extraia o texto e detecte em segundo plano, assim quando o usuário clicar em organizar, os dados já estarão prontos para serem inseridos nos campos correspondentes.
