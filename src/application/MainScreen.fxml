@@ -23,18 +23,33 @@
 	<children>
 		<MenuBar>
 			<menus>
-				<Menu mnemonicParsing="false" text="Documento">
-					<items>
+            <Menu mnemonicParsing="false" text="Arquivo">
+              <items>
 						<MenuItem mnemonicParsing="false" onAction="#openDirectory" text="Abrir Pasta">
 							<accelerator>
 								<KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
 							</accelerator>
 						</MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#fullScreen" text="Tela Inteira">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="F11" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#close" text="Fechar">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="F4" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+              </items>
+            </Menu>
+				<Menu mnemonicParsing="false" text="Documento">
+					<items>
 						<CheckMenuItem fx:id="menu_autoDetection" mnemonicParsing="false" selected="true" text="Auto Detectar">
 							<accelerator>
 								<KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
 							</accelerator>
 						</CheckMenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#oldDocument" text="Documento Antigo" />
 						<MenuItem mnemonicParsing="false" onAction="#showExtractedText" text="Texto Extraído">
 							<accelerator>
 								<KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
@@ -45,6 +60,7 @@
 				<Menu mnemonicParsing="false" text="Ajuda">
 					<items>
 						<MenuItem mnemonicParsing="false" text="Documentação" />
+                  <MenuItem mnemonicParsing="false" onAction="#openSourceCode" text="Código Fonte" />
 						<MenuItem mnemonicParsing="false" text="Sobre" />
 					</items>
 				</Menu>
@@ -102,11 +118,6 @@
 								<Font size="9.0" />
 							</font>
 						</Label>
-                  <Button layoutX="14.0" layoutY="116.0" mnemonicParsing="false" onAction="#oldDocument" prefHeight="0.0" prefWidth="104.0" text="Documento Arquivo">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Button>
 					</children>
 				</AnchorPane>
 			</items>

@@ -1,8 +1,11 @@
 package application;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -42,6 +45,7 @@ public class MainScreenController implements Initializable {
 	public static Hashtable<String, DocumentInformation> dataInfo;
 	private int indexImage = 0;
 	private String firstPageName;
+	private boolean fullScreen = false;
 
 	@FXML
 	private CheckMenuItem menu_autoDetection;
@@ -191,11 +195,12 @@ public class MainScreenController implements Initializable {
 		alert.setTitle("Information Dialog");
 		alert.setHeaderText(null);
 
-		// alert.setContentText("Não há texto extraído!");
-
-		alert.setContentText(dataInfo.get(firstPageName).getOriginalText());
-
-		alert.showAndWait();
+		try {
+			alert.setContentText(dataInfo.get(firstPageName).getOriginalText());
+			alert.showAndWait();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	@FXML
@@ -298,6 +303,9 @@ public class MainScreenController implements Initializable {
 		}
 	}
 	
+	/**
+	 * Componentes MENU
+	 */
 	@FXML
 	private void oldDocument(ActionEvent event) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -307,25 +315,49 @@ public class MainScreenController implements Initializable {
 
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK){
-			MoveFile moveFile = new MoveFile();
-
-			moveFile.setData(null, "arquivo", "", "", "");
-			moveFile.MoveFiles(fileImages);
-
-			startScreen();
-			autoFill();
+			try {
+				MoveFile moveFile = new MoveFile();
+	
+				moveFile.setDataOldFiles();
+				moveFile.MoveFiles(fileImages);
+	
+				startScreen();
+				autoFill();
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
 		} else {
 		    System.out.println("nonon");
 		}
 	}
+	
+	@FXML
+	private void openSourceCode(ActionEvent event) throws MalformedURLException, IOException, URISyntaxException {
+		String URL = "https://github.com/SavioAndres/Scanned-Document-Organizer";
+		Desktop.getDesktop().browse(new URL(URL).toURI());
+	}
+	
+	@FXML
+	private void fullScreen(ActionEvent event) {
+		fullScreen = !fullScreen;
+		Main.stage.setFullScreen(fullScreen);
+	}
 
+	@FXML
+	private void close(ActionEvent event) {
+		Main.stage.close();
+	}
+	/**
+	 * Fim Componentes MENU
+	 */
+	
 	private void maskDate() {
 		TextField dateEditor = dp_date.getEditor();
 
 		dateEditor.addEventHandler(KeyEvent.KEY_TYPED, event -> {
 			Platform.runLater(() -> {
 				String textUntilHere = dateEditor.getText(0, dateEditor.getCaretPosition());
-				if (textUntilHere.matches("\\d\\d") || textUntilHere.matches("\\d\\d/\\d\\d")) {
+				if (textUntilHere.matches("(0[1-9]|[12][0-9]|3[01])") || textUntilHere.matches("(0[-9]|[12][0-9]|3[01])/(0[1-9]|1[012])")) {
 					String textAfterHere = "";
 					try {
 						textAfterHere = dateEditor.getText(dateEditor.getCaretPosition() + 1,

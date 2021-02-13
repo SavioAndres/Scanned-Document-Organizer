@@ -13,7 +13,6 @@ public class BackgroundSystem implements Runnable {
 	@Override
 	public void run() {
 		SeparateDocument.files(directory);
-
 	}
 
 }

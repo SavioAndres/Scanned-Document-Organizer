@@ -12,6 +12,7 @@ import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import organize_files.DocumentType;
+import structure.Format;
 
 public class ExtractText {
 
@@ -30,7 +31,6 @@ public class ExtractText {
 	}
 
 	public DocumentInformation readImage(File imageFile) throws IOException, TesseractException {
-
 		BufferedImage image = ImageIO.read(imageFile);
 
 		return dataExtracted(instance.doOCR(image));
@@ -40,7 +40,7 @@ public class ExtractText {
 		String cleanText = text.toLowerCase().replace("\n", " ");
 
 		DocumentInformation docInfo = new DocumentInformation();
-		
+
 		String typeDoc = getTypeDoc(cleanText);
 		docInfo.setProtocolo(getProtocolo(cleanText));
 		docInfo.setData(getDate(cleanText, typeDoc));
@@ -67,29 +67,28 @@ public class ExtractText {
 				break;
 			}
 		}
-		return protocolo.replace("-", ".").replace("/", ".").trim();
+		return protocolo != "" ? Format.protocolo(protocolo) : "";
 	}
 
 	private String getDateText(String text) {
-		String[] months = new String[] {"janeiro" , "fevereiro", 
-				"março", "abril", "maio", "junho", "julho", "agosto", 
-				"setembro", "outubro", "novembro", "dezembro"};
-		
+		String[] months = new String[] { "janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto",
+				"setembro", "outubro", "novembro", "dezembro" };
+
 		String regex = "";
-		
+
 		for (int i = 0; i < months.length; i++) {
 			regex = regex + " | ((0?[1-9]|[12][0-9]|3[01]) de " + months[i] + " de ((?:19|20)[0-9][0-9]))";
 		}
-		
+
 		regex = "(" + regex.substring(3) + ")*";
-		
+
 		Pattern pattern = Pattern.compile(regex);
 
 		Matcher matcher = pattern.matcher(text);
-		
+
 		String date = "";
 		String finalDate = "";
-		
+
 		while (matcher.find()) {
 			date = matcher.group().trim();
 			if (!date.isEmpty()) {
@@ -108,10 +107,10 @@ public class ExtractText {
 
 		return finalDate;
 	}
-	
+
 	private LocalDate getDate(String text, String typeDoc) {
 		text = getDateText(text) + text;
-		
+
 		String regex = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((?:19|20)[0-9][0-9])";
 
 		Pattern pattern = Pattern.compile(regex);
@@ -125,7 +124,7 @@ public class ExtractText {
 
 		while (matcher.find()) {
 			date = matcher.group().trim();
-			
+
 			if (typeDoc.equals("Férias")) {
 				finalDate = date;
 				break;
@@ -150,10 +149,8 @@ public class ExtractText {
 					}
 				}
 			}
-			
+
 		}
-		
-		
 
 		if (!finalDate.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -192,7 +189,7 @@ public class ExtractText {
 			}
 		}
 
-		return indexTypeDoc != -1 ? typeDocs[indexTypeDoc] : "";
+		return indexTypeDoc != -1 ? typeDocs[indexTypeDoc] : typeDocs[0];
 	}
 
 }

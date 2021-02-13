@@ -68,10 +68,7 @@ public class SeparateBlackSheet {
 			for (int i = 0; i < size; i++) {
 				if (files[i].isFile()) {
 					img = ResizeImage.resize(files[i], 3);
-
 					isBlack = isBlackPage(img);
-					
-					System.out.println(" - " + files[i].getName());
 
 					if (isBlack == 0) {
 						selectedFiles.add(files[i]);
@@ -89,8 +86,6 @@ public class SeparateBlackSheet {
 						}
 					} else {
 						selectedFiles.add(files[i]);
-						// img = ResizeImage.resize(files[i + 1], 3);
-						// if (isBlackPage(img) == -1)
 						selectedFiles.add(files[i + 1]);
 						size = 0;
 					}
@@ -120,17 +115,12 @@ public class SeparateBlackSheet {
 		}
 
 		sum /= img.getWidth() * img.getHeight();
-		
-		System.out.print(sum);
 
 		if (sum > 0.999) {
-			System.out.print(" - Branca");
 			return 1;
 		} else if (sum < 0.83) {
-			System.out.print(" - Preta");
 			return -1;
 		} else {
-			System.out.print(" - Normal");
 			return 0;
 		}
 	}

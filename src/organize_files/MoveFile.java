@@ -8,64 +8,71 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import application.MainScreenController;
+import structure.Format;
 
 public class MoveFile {
 
 	private String folderName;
 	private String fileName;
 	private ArrayList<Integer> portariaPages;
+	private boolean OldFile = false;
 
 	public void MoveFiles(ArrayList<File> fileImages) {
 		File directory = MainScreenController.directory;
 		File file = null;
-
-		File newDirectory = new File(directory.getAbsolutePath() + "\\" + folderName);
-		if (!newDirectory.exists())
-			newDirectory.mkdir();
+		
+		File newDirectory = null;
+		File newDirectoryFolder = createDirectory(directory, folderName);
+		File newDirectoryBlack = createDirectory(directory, "pretas");
+		File newDirectoryOld = createDirectory(directory, "arquivo");
 
 		for (int i = 0; i < fileImages.size(); i++) {
 			file = fileImages.get(i);
-			if (file.isFile()) {
-				String port = "";
-				if (portariaPages != null)
-					if (portariaPages.contains(i + 1))
-						port = "Portaria ";
+			
+			String port = "";
+			if (portariaPages != null)
+				if (portariaPages.contains(i + 1))
+					port = "Portaria ";
 
-				try {
-					Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-					String fileNewName = port + fileName + " " + timestamp.getTime() + i + "."
-							+ file.getName().substring(file.getName().lastIndexOf(".") + 1);
-
-					if (i == fileImages.size() - 1 || i == fileImages.size() - 2) {
-						newDirectory = new File(directory.getAbsolutePath() + "\\pretas");
-						if (!newDirectory.exists())
-							newDirectory.mkdir();
-						fileNewName = folderName + " " + fileName + " " + timestamp.getTime() + i + "."
-								+ file.getName().substring(file.getName().lastIndexOf(".") + 1);
-					}
-
-					Files.move(Paths.get(directory.getAbsolutePath() + "\\" + file.getName()),
-							Paths.get(newDirectory.getAbsolutePath() + "\\" + fileNewName));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			try {
+				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+				String fileNewName;
+				String fileExtension = "." + file.getName().substring(file.getName().lastIndexOf(".") + 1);
+				
+				if (i == fileImages.size() - 1 || i == fileImages.size() - 2) {
+					OldFile = false;
+					newDirectory = newDirectoryBlack;
+					fileNewName = folderName + " " + fileName + timestamp.getTime() + i + fileExtension;
+				} else if (OldFile) {
+					newDirectory = newDirectoryOld;
+					fileNewName = timestamp.getTime() + i + fileExtension;
+				} else {
+					newDirectory = newDirectoryFolder;
+					fileNewName = port + fileName + timestamp.getTime() + i + fileExtension;
 				}
-
-			} else if (file.isDirectory()) {
-				System.out.println("Directory " + file.getName());
+				
+				Files.move(Paths.get(directory.getAbsolutePath() + "\\" + file.getName()),
+						Paths.get(newDirectory.getAbsolutePath() + "\\" + fileNewName));
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
 
-	public void setData(LocalDate date, String portariaEdoc, String comuInt, String docType, String portariaPage) {
-		if (!portariaEdoc.isEmpty())
-			portariaEdoc = " " + portariaEdoc;
+	public void setData(LocalDate date, String protocoloEdoc, String comuInt, String docType, String portariaPage) {
+		if (!protocoloEdoc.isEmpty()) {
+			protocoloEdoc = Format.protocolo(protocoloEdoc);
+			protocoloEdoc = protocoloEdoc.replace("/", ".").replace("-", ".");
+			protocoloEdoc = " " + protocoloEdoc;
+		}
 		if (!comuInt.isEmpty())
 			comuInt = " " + comuInt;
 
 		folderName = date.getYear() + "." + String.format("%02d", date.getMonthValue()) + "."
-				+ String.format("%02d", date.getDayOfMonth()) + portariaEdoc + comuInt;
-		fileName = docType;
+				+ String.format("%02d", date.getDayOfMonth()) + protocoloEdoc + comuInt;
+		fileName = docType + " ";
 		if (!portariaPage.isEmpty()) {
 			String[] result = portariaPage.split(",");
 			portariaPages = new ArrayList<Integer>();
@@ -73,6 +80,20 @@ public class MoveFile {
 				portariaPages.add(Integer.parseInt(result[i].trim()));
 			}
 		}
+	}
+	
+	public void setDataOldFiles() {
+		OldFile = true;
+		folderName = "arquivo";
+		fileName = "";
+	}
+	
+	private File createDirectory(File directory, String name) {
+		File newDirectory = new File(directory.getAbsolutePath() + "\\" + name);
+		if (!newDirectory.exists())
+			newDirectory.mkdir();
+		
+		return newDirectory;
 	}
 
 }

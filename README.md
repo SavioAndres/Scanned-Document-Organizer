@@ -1,5 +1,5 @@
 # Tela
-![Tele](https://uploaddeimagens.com.br/images/003/059/794/full/image.png)
+![Tele](resources/images/screen.gif)
 
 # Funções
 - Auto deteção da data, protocolo e tipo de documento
