@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import auto_detect_data.BackgroundSystem;
 import auto_detect_data.DocumentInformation;
@@ -18,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -293,6 +295,27 @@ public class MainScreenController implements Initializable {
 		if (!DocumentType.subTypeDisable) {
 			cb_subTypeDoc.setValue(DocumentType.valueType);
 			cb_subTypeDoc.getItems().setAll(DocumentType.itens);
+		}
+	}
+	
+	@FXML
+	private void oldDocument(ActionEvent event) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmar");
+		alert.setHeaderText("Documento antigo");
+		alert.setContentText("Clique em OK somente se esse documento for antigo e fizer parte da pasta arquivo.\nDeseja que esse documento seja movido para pasta arquivo?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			MoveFile moveFile = new MoveFile();
+
+			moveFile.setData(null, "arquivo", "", "", "");
+			moveFile.MoveFiles(fileImages);
+
+			startScreen();
+			autoFill();
+		} else {
+		    System.out.println("nonon");
 		}
 	}
 

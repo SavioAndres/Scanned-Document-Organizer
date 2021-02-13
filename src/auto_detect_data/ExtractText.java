@@ -40,9 +40,11 @@ public class ExtractText {
 		String cleanText = text.toLowerCase().replace("\n", " ");
 
 		DocumentInformation docInfo = new DocumentInformation();
+		
+		String typeDoc = getTypeDoc(cleanText);
 		docInfo.setProtocolo(getProtocolo(cleanText));
-		docInfo.setData(getDate(cleanText));
-		docInfo.setTipoDocumento(getTypeDoc(cleanText));
+		docInfo.setData(getDate(cleanText, typeDoc));
+		docInfo.setTipoDocumento(typeDoc);
 		docInfo.setOriginalText(text);
 
 		return docInfo;
@@ -68,20 +70,66 @@ public class ExtractText {
 		return protocolo.replace("-", ".").replace("/", ".").trim();
 	}
 
-	private LocalDate getDate(String text) {
+	private String getDateText(String text) {
+		String[] months = new String[] {"janeiro" , "fevereiro", 
+				"março", "abril", "maio", "junho", "julho", "agosto", 
+				"setembro", "outubro", "novembro", "dezembro"};
+		
+		String regex = "";
+		
+		for (int i = 0; i < months.length; i++) {
+			regex = regex + " | ((0?[1-9]|[12][0-9]|3[01]) de " + months[i] + " de ((?:19|20)[0-9][0-9]))";
+		}
+		
+		regex = "(" + regex.substring(3) + ")*";
+		
+		Pattern pattern = Pattern.compile(regex);
+
+		Matcher matcher = pattern.matcher(text);
+		
+		String date = "";
+		String finalDate = "";
+		
+		while (matcher.find()) {
+			date = matcher.group().trim();
+			if (!date.isEmpty()) {
+				break;
+			}
+		}
+
+		for (int i = 0; i < months.length; i++) {
+			if (date.contains(months[i])) {
+				String[] dateSplit = date.split(" ");
+				String day = String.format("%02d", Integer.parseInt(dateSplit[0]));
+				String month = String.format("%02d", (i + 1));
+				finalDate = day + "/" + month + "/" + dateSplit[4];
+			}
+		}
+
+		return finalDate;
+	}
+	
+	private LocalDate getDate(String text, String typeDoc) {
+		text = getDateText(text) + text;
+		
 		String regex = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((?:19|20)[0-9][0-9])";
 
 		Pattern pattern = Pattern.compile(regex);
 
 		Matcher matcher = pattern.matcher(text);
 
-		String date, finalDate = "";
+		String date = null, finalDate = "";
 		int year, lastYear = 0;
 		int month, lastMonth = 0;
 		int day, lastDay = 0;
 
 		while (matcher.find()) {
 			date = matcher.group().trim();
+			
+			if (typeDoc.equals("Férias")) {
+				finalDate = date;
+				break;
+			}
 
 			if (!date.isEmpty()) {
 				year = Integer.parseInt(date.split("/")[2]);
@@ -102,7 +150,10 @@ public class ExtractText {
 					}
 				}
 			}
+			
 		}
+		
+		
 
 		if (!finalDate.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
