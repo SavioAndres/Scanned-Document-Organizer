@@ -357,7 +357,7 @@ public class MainScreenController implements Initializable {
 		dateEditor.addEventHandler(KeyEvent.KEY_TYPED, event -> {
 			Platform.runLater(() -> {
 				String textUntilHere = dateEditor.getText(0, dateEditor.getCaretPosition());
-				if (textUntilHere.matches("(0[1-9]|[12][0-9]|3[01])") || textUntilHere.matches("(0[-9]|[12][0-9]|3[01])/(0[1-9]|1[012])")) {
+				if (textUntilHere.matches("\\d\\d") || textUntilHere.matches("\\d\\d/\\d\\d")) {
 					String textAfterHere = "";
 					try {
 						textAfterHere = dateEditor.getText(dateEditor.getCaretPosition() + 1,
@@ -380,9 +380,9 @@ public class MainScreenController implements Initializable {
 	}
 
 	private void autoFill() {
-		if (menu_autoDetection.isSelected()) {
+		if (menu_autoDetection.isSelected() && dataInfo.containsKey(firstPageName)) {
 			DocumentInformation docInfo = dataInfo.get(firstPageName);
-
+			
 			dp_date.setValue(docInfo.getData());
 			tf_protocoloEdoc.setText(docInfo.getProtocolo());
 			cb_typeDoc.setValue(docInfo.getTipoDocumento());

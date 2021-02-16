@@ -118,7 +118,7 @@ public class SeparateBlackSheet {
 
 		if (sum > 0.999) {
 			return 1;
-		} else if (sum < 0.83) {
+		} else if (sum < 0.14) {
 			return -1;
 		} else {
 			return 0;

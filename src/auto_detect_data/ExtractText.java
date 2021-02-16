@@ -56,7 +56,6 @@ public class ExtractText {
 				+ "\\d{3}.\\d{3}.\\d{5}/\\d{4}.\\d{1})*";
 
 		Pattern pattern = Pattern.compile(regex);
-
 		Matcher matcher = pattern.matcher(text);
 
 		String protocolo = "";
@@ -83,7 +82,6 @@ public class ExtractText {
 		regex = "(" + regex.substring(3) + ")*";
 
 		Pattern pattern = Pattern.compile(regex);
-
 		Matcher matcher = pattern.matcher(text);
 
 		String date = "";
@@ -111,10 +109,8 @@ public class ExtractText {
 	private LocalDate getDate(String text, String typeDoc) {
 		text = getDateText(text) + text;
 
-		String regex = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((?:19|20)[0-9][0-9])";
-
+		String regex = "(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[012])/((19|20)[0-9][0-9])";
 		Pattern pattern = Pattern.compile(regex);
-
 		Matcher matcher = pattern.matcher(text);
 
 		String date = null, finalDate = "";

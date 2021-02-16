@@ -95,6 +95,6 @@ public class SeparateDocument {
 
 		sum /= img.getWidth() * img.getHeight();
 
-		return sum < 0.83;
+		return sum < 0.14;
 	}
 }
