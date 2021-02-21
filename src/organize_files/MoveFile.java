@@ -68,7 +68,7 @@ public class MoveFile {
 			protocoloEdoc = " " + protocoloEdoc;
 		}
 		if (!comuInt.isEmpty())
-			comuInt = " " + comuInt;
+			comuInt = " " + Format.comunicaoInterna(comuInt, date.getYear() + "");
 
 		folderName = date.getYear() + "." + String.format("%02d", date.getMonthValue()) + "."
 				+ String.format("%02d", date.getDayOfMonth()) + protocoloEdoc + comuInt;

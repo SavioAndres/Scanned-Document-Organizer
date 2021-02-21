@@ -21,4 +21,33 @@ public class Format {
 		return String.format("%s.%s.%s/%s-%s", a, b, c, d, e);
 	}
 	
+	public static String comunicaoInterna(String comuInt, String anoDoc) {
+		try {
+			comuInt = comuInt.replace("-", ".").replace("/", ".").trim();
+			
+			String cod = comuInt;
+			String ano = anoDoc;
+			
+			if (comuInt.contains(".") && comuInt.length() > 4) {
+				cod = comuInt.split("\\.")[0];
+				ano = comuInt.split("\\.")[1];
+			}
+			
+			if (!comuInt.contains(".") && comuInt.length() > 4) {
+				cod = comuInt.substring(0, comuInt.length() - 4);
+				ano = comuInt.substring(comuInt.length() - 4, comuInt.length());
+			}
+			
+			if (cod.length() <= 4 && comuInt.length() > 0)
+				cod = String.format("%04d", Integer.parseInt(cod));
+			
+			if (ano.length() != 4)
+				ano = anoDoc;
+			
+			return comuInt.isEmpty() ? "" : cod + "." + ano;
+		} catch (Exception e) {
+			return "";
+		}
+	}
+	
 }

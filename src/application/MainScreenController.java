@@ -32,6 +32,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.ScrollEvent;
 import main.Main;
 import organize_files.DocumentType;
 import organize_files.MoveFile;
@@ -44,13 +45,14 @@ public class MainScreenController implements Initializable {
 	public static ArrayList<File> fileImages;
 	public static Hashtable<String, DocumentInformation> dataInfo;
 	private int indexImage = 0;
+	private double zoomValue = 668;
 	private String firstPageName;
 	private boolean fullScreen = false;
 
 	@FXML
 	private CheckMenuItem menu_autoDetection;
 	@FXML
-	private ImageView imageView;
+	private ImageView image_view;
 	@FXML
 	private Hyperlink hl_folderName;
 	@FXML
@@ -59,6 +61,10 @@ public class MainScreenController implements Initializable {
 	private Label lb_numberPage;
 	@FXML
 	private Label lb_totalPages;
+	@FXML
+	private ImageView image_penultimate;
+	@FXML
+	private ImageView image_last;
 	@FXML
 	private DatePicker dp_date;
 	@FXML
@@ -89,7 +95,7 @@ public class MainScreenController implements Initializable {
 		slide();
 		maskDate();
 
-		btn_organize.setDisable(true);
+		//btn_organize.setDisable(true);
 		btn_firstPage.setDisable(true);
 		btn_previousImage.setDisable(true);
 		btn_lastPage.setDisable(true);
@@ -97,10 +103,10 @@ public class MainScreenController implements Initializable {
 		tf_protocoloEdoc.setText("");
 		cb_typeDoc.getItems().setAll(DocumentType.types());
 	}
-
+	
 	@FXML
 	private void openDirectory(ActionEvent event) {
-		imageView.setFitWidth(668);
+		image_view.setFitWidth(668);
 		try {
 			directory = OpenDirectory.open();
 			Main.stage.setTitle("Organizador de documentos digitalizados - " + directory.getAbsolutePath());
@@ -143,8 +149,10 @@ public class MainScreenController implements Initializable {
 			if (fileImages != null) {
 				indexImage = 0;
 				firstPageName = fileImages.get(0).getName();
-				imageView.setImage(OpenDirectory.image(fileImages.get(0)));
-	
+				image_view.setImage(OpenDirectory.image(fileImages.get(0)));
+				image_penultimate.setImage(OpenDirectory.image(fileImages.get(fileImages.size() - 2)));
+				image_last.setImage(OpenDirectory.image(fileImages.get(fileImages.size() - 1)));
+				
 				btn_organize.setDisable(false);
 				btn_firstPage.setDisable(true);
 				btn_previousImage.setDisable(true);
@@ -164,7 +172,9 @@ public class MainScreenController implements Initializable {
 				cb_subTypeDoc.setValue("");
 				tf_portariaPage.setText("");
 			} else {
-				imageView.setImage(null);
+				image_view.setImage(null);
+				image_penultimate.setImage(null);
+				image_last.setImage(null);
 				btn_organize.setDisable(true);
 				btn_firstPage.setDisable(true);
 				btn_previousImage.setDisable(true);
@@ -206,7 +216,7 @@ public class MainScreenController implements Initializable {
 	@FXML
 	private void firstPage(ActionEvent event) throws FileNotFoundException, IOException {
 		indexImage = 0;
-		imageView.setImage(OpenDirectory.image(fileImages.get(indexImage)));
+		image_view.setImage(OpenDirectory.image(fileImages.get(indexImage)));
 		btn_nextImage.setDisable(false);
 		btn_previousImage.setDisable(true);
 		hl_imageName.setText(fileImages.get(indexImage).getName());
@@ -218,7 +228,7 @@ public class MainScreenController implements Initializable {
 	@FXML
 	private void lastPage(ActionEvent event) throws FileNotFoundException, IOException {
 		indexImage = fileImages.size() - 1;
-		imageView.setImage(OpenDirectory.image(fileImages.get(indexImage)));
+		image_view.setImage(OpenDirectory.image(fileImages.get(indexImage)));
 		btn_nextImage.setDisable(true);
 		btn_previousImage.setDisable(false);
 		hl_imageName.setText(fileImages.get(indexImage).getName());
@@ -231,7 +241,7 @@ public class MainScreenController implements Initializable {
 	private void nextImage(ActionEvent event) throws FileNotFoundException, IOException {
 		if (indexImage < fileImages.size() - 1) {
 			indexImage++;
-			imageView.setImage(OpenDirectory.image(fileImages.get(indexImage)));
+			image_view.setImage(OpenDirectory.image(fileImages.get(indexImage)));
 			btn_previousImage.setDisable(false);
 			btn_firstPage.setDisable(false);
 			hl_imageName.setText(fileImages.get(indexImage).getName());
@@ -250,7 +260,7 @@ public class MainScreenController implements Initializable {
 	private void previousImage(ActionEvent event) throws FileNotFoundException, IOException {
 		if (indexImage > 0) {
 			indexImage--;
-			imageView.setImage(OpenDirectory.image(fileImages.get(indexImage)));
+			image_view.setImage(OpenDirectory.image(fileImages.get(indexImage)));
 			btn_nextImage.setDisable(false);
 			btn_lastPage.setDisable(false);
 			hl_imageName.setText(fileImages.get(indexImage).getName());
@@ -268,7 +278,7 @@ public class MainScreenController implements Initializable {
 	private void slide() {
 		slider_zoom.setMin(410);
 		slider_zoom.setMax(1200);
-		slider_zoom.setValue(668);
+		slider_zoom.setValue(zoomValue);
 		slider_zoom.setShowTickLabels(true);
 		slider_zoom.setShowTickMarks(true);
 		slider_zoom.setBlockIncrement(10);
@@ -276,11 +286,36 @@ public class MainScreenController implements Initializable {
 		slider_zoom.valueProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				imageView.setFitWidth(newValue.doubleValue());
+				zoomValue = newValue.doubleValue();
+				image_view.setFitWidth(newValue.doubleValue());
 			}
 		});
 	}
+	
+	@FXML
+	private void zoom(ScrollEvent event) {
+		if (zoomValue <= 1200) {
+			zoomValue = zoomValue + 30;
+			slider_zoom.setValue(zoomValue);
+		}
+	}
+	
+	@FXML
+	private void zoomIn(ActionEvent event) {
+		if (zoomValue <= 1200) {
+			zoomValue = zoomValue + 30;
+			slider_zoom.setValue(zoomValue);
+		}
+	}
 
+	@FXML
+	private void zoomOut(ActionEvent event) {
+		if (zoomValue > 410) {
+			zoomValue = zoomValue - 30;
+			slider_zoom.setValue(zoomValue);
+		}
+	}
+	
 	@FXML
 	private void linkFolderName(ActionEvent event) {
 		OpenDirectory.openWindows(directory);
@@ -353,7 +388,7 @@ public class MainScreenController implements Initializable {
 	
 	private void maskDate() {
 		TextField dateEditor = dp_date.getEditor();
-
+		
 		dateEditor.addEventHandler(KeyEvent.KEY_TYPED, event -> {
 			Platform.runLater(() -> {
 				String textUntilHere = dateEditor.getText(0, dateEditor.getCaretPosition());
@@ -368,6 +403,9 @@ public class MainScreenController implements Initializable {
 					dateEditor.setText(textUntilHere + "/" + textAfterHere);
 					dateEditor.positionCaret(caretPosition + 1);
 				}
+				
+				if (dateEditor.getText().length() > 9)
+					tf_protocoloEdoc.requestFocus();
 			});
 		});
 	}
