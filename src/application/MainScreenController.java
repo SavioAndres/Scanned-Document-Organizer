@@ -66,6 +66,10 @@ public class MainScreenController implements Initializable {
 	@FXML
 	private ImageView image_last;
 	@FXML
+	private Label lb_last;
+	@FXML
+	private Label lb_penultimate;
+	@FXML
 	private DatePicker dp_date;
 	@FXML
 	private TextField tf_protocoloEdoc;
@@ -95,7 +99,7 @@ public class MainScreenController implements Initializable {
 		slide();
 		maskDate();
 
-		//btn_organize.setDisable(true);
+		// btn_organize.setDisable(true);
 		btn_firstPage.setDisable(true);
 		btn_previousImage.setDisable(true);
 		btn_lastPage.setDisable(true);
@@ -103,7 +107,7 @@ public class MainScreenController implements Initializable {
 		tf_protocoloEdoc.setText("");
 		cb_typeDoc.getItems().setAll(DocumentType.types());
 	}
-	
+
 	@FXML
 	private void openDirectory(ActionEvent event) {
 		image_view.setFitWidth(668);
@@ -123,7 +127,7 @@ public class MainScreenController implements Initializable {
 		if (dp_date.getValue() == null || cb_typeDoc.getValue().isEmpty()) {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("Atenção");
-			alert.setHeaderText("A data e o tipo do documento não podem está em branco!");
+			alert.setHeaderText("A data e o tipo do documento não podem estar em branco!");
 			alert.setContentText("Por favor, preencha para continuar.");
 			alert.showAndWait();
 		} else {
@@ -152,20 +156,22 @@ public class MainScreenController implements Initializable {
 				image_view.setImage(OpenDirectory.image(fileImages.get(0)));
 				image_penultimate.setImage(OpenDirectory.image(fileImages.get(fileImages.size() - 2)));
 				image_last.setImage(OpenDirectory.image(fileImages.get(fileImages.size() - 1)));
+				lb_penultimate.setText("Penúltima");
+				lb_last.setText("Última");
 				
 				btn_organize.setDisable(false);
 				btn_firstPage.setDisable(true);
 				btn_previousImage.setDisable(true);
 				btn_lastPage.setDisable(false);
 				btn_nextImage.setDisable(false);
-	
+
 				dp_date.requestFocus();
 				lb_totalPages.setText(fileImages.size() + "");
 				hl_folderName.setText(directory.getName());
 				hl_imageName.setText(fileImages.get(0).getName());
 				lb_numberPage.setText("1");
 				dp_date.setValue(null);
-	
+
 				tf_protocoloEdoc.setText("");
 				tf_comuInt.setText("");
 				cb_typeDoc.setValue("");
@@ -175,18 +181,20 @@ public class MainScreenController implements Initializable {
 				image_view.setImage(null);
 				image_penultimate.setImage(null);
 				image_last.setImage(null);
+				lb_penultimate.setText("");
+				lb_last.setText("");
 				btn_organize.setDisable(true);
 				btn_firstPage.setDisable(true);
 				btn_previousImage.setDisable(true);
 				btn_lastPage.setDisable(true);
 				btn_nextImage.setDisable(true);
-				
+
 				lb_totalPages.setText("...");
 				hl_folderName.setText("...");
 				hl_imageName.setText("...");
 				lb_numberPage.setText("..");
 				dp_date.setValue(null);
-				
+
 				tf_protocoloEdoc.setText("");
 				tf_comuInt.setText("");
 				cb_typeDoc.setValue("");
@@ -291,31 +299,7 @@ public class MainScreenController implements Initializable {
 			}
 		});
 	}
-	
-	@FXML
-	private void zoom(ScrollEvent event) {
-		if (zoomValue <= 1200) {
-			zoomValue = zoomValue + 30;
-			slider_zoom.setValue(zoomValue);
-		}
-	}
-	
-	@FXML
-	private void zoomIn(ActionEvent event) {
-		if (zoomValue <= 1200) {
-			zoomValue = zoomValue + 30;
-			slider_zoom.setValue(zoomValue);
-		}
-	}
 
-	@FXML
-	private void zoomOut(ActionEvent event) {
-		if (zoomValue > 410) {
-			zoomValue = zoomValue - 30;
-			slider_zoom.setValue(zoomValue);
-		}
-	}
-	
 	@FXML
 	private void linkFolderName(ActionEvent event) {
 		OpenDirectory.openWindows(directory);
@@ -337,7 +321,7 @@ public class MainScreenController implements Initializable {
 			cb_subTypeDoc.getItems().setAll(DocumentType.itens);
 		}
 	}
-	
+
 	/**
 	 * Componentes MENU
 	 */
@@ -346,32 +330,33 @@ public class MainScreenController implements Initializable {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmar");
 		alert.setHeaderText("Documento antigo");
-		alert.setContentText("Clique em OK somente se esse documento for antigo e fizer parte da pasta arquivo.\nDeseja que esse documento seja movido para pasta arquivo?");
+		alert.setContentText(
+				"Clique em OK somente se esse documento for antigo e fizer parte da pasta arquivo.\nDeseja que esse documento seja movido para pasta arquivo?");
 
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK){
+		if (result.get() == ButtonType.OK) {
 			try {
 				MoveFile moveFile = new MoveFile();
-	
+
 				moveFile.setDataOldFiles();
 				moveFile.MoveFiles(fileImages);
-	
+
 				startScreen();
 				autoFill();
-			}catch (Exception e) {
+			} catch (Exception e) {
 				// TODO: handle exception
 			}
 		} else {
-		    System.out.println("nonon");
+			System.out.println("nonon");
 		}
 	}
-	
+
 	@FXML
 	private void openSourceCode(ActionEvent event) throws MalformedURLException, IOException, URISyntaxException {
 		String URL = "https://github.com/SavioAndres/Scanned-Document-Organizer";
 		Desktop.getDesktop().browse(new URL(URL).toURI());
 	}
-	
+
 	@FXML
 	private void fullScreen(ActionEvent event) {
 		fullScreen = !fullScreen;
@@ -382,13 +367,38 @@ public class MainScreenController implements Initializable {
 	private void close(ActionEvent event) {
 		Main.stage.close();
 	}
+	
+	@FXML //Zoom Scroll
+	private void zoom(ScrollEvent event) {
+		if (zoomValue <= 1200) {
+			zoomValue = zoomValue + 30;
+			slider_zoom.setValue(zoomValue);
+		}
+	}
+
+	@FXML
+	private void zoomIn(ActionEvent event) {
+		if (zoomValue <= 1200) {
+			zoomValue = zoomValue + 30;
+			slider_zoom.setValue(zoomValue);
+		}
+	}
+
+	@FXML
+	private void zoomOut(ActionEvent event) {
+		if (zoomValue > 410) {
+			zoomValue = zoomValue - 30;
+			slider_zoom.setValue(zoomValue);
+		}
+	}
+
 	/**
 	 * Fim Componentes MENU
 	 */
-	
+
 	private void maskDate() {
 		TextField dateEditor = dp_date.getEditor();
-		
+
 		dateEditor.addEventHandler(KeyEvent.KEY_TYPED, event -> {
 			Platform.runLater(() -> {
 				String textUntilHere = dateEditor.getText(0, dateEditor.getCaretPosition());
@@ -403,7 +413,7 @@ public class MainScreenController implements Initializable {
 					dateEditor.setText(textUntilHere + "/" + textAfterHere);
 					dateEditor.positionCaret(caretPosition + 1);
 				}
-				
+
 				if (dateEditor.getText().length() > 9)
 					tf_protocoloEdoc.requestFocus();
 			});
@@ -420,7 +430,7 @@ public class MainScreenController implements Initializable {
 	private void autoFill() {
 		if (menu_autoDetection.isSelected() && dataInfo.containsKey(firstPageName)) {
 			DocumentInformation docInfo = dataInfo.get(firstPageName);
-			
+
 			dp_date.setValue(docInfo.getData());
 			tf_protocoloEdoc.setText(docInfo.getProtocolo());
 			cb_typeDoc.setValue(docInfo.getTipoDocumento());

@@ -20,7 +20,6 @@ public class Main extends Application {
 			Scene scene = new Scene(root);
 
 			primaryStage.setTitle("Organizador de documentos digitalizados");
-			// primaryStage.setMaximized(true);
 			primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon.png")));
 			primaryStage.setScene(scene);
 			primaryStage.show();
