@@ -5,7 +5,7 @@
 - Auto deteção da data, protocolo e tipo de documento
 - Visualização das páginas do documento
 - Total de páginas do documento
-- Número da página atual
+- Número do total de páginas e da página atual
 - Link para página
 - Link para visualizar a página no programa padrão do SO
 - Zoom nas páginas
