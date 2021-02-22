@@ -1,19 +1,20 @@
 # Tela
 ![Tele](resources/images/screen.gif)
 
-# FunÁıes
-- Auto deteÁ„o da data, protocolo e tipo de documento
-- VisualizaÁ„o das p·ginas do documento
-- Total de p·ginas do documento
-- N˙mero da p·gina atual
-- Link para p·gina
-- Link para visualizar a p·gina no programa padr„o do SO
-- Zoom nas p·ginas
+# Fun√ß√µes
+- Auto dete√ß√£o da data, protocolo e tipo de documento
+- Visualiza√ß√£o das p√°ginas do documento
+- Total de p√°ginas do documento
+- N√∫mero da p√°gina atual
+- Link para p√°gina
+- Link para visualizar a p√°gina no programa padr√£o do SO
+- Zoom nas p√°ginas
 - Tipos de documentos organizados de forma a facilitar a escolha
-- ClassificaÁ„o de Portarias por n˙mero de p·gina
-- FormataÁ„o inteligente do protocolo e da comunicaÁ„o interna 
-- VisualizaÁ„o r·pida das folhas pretas
+- Classifica√ß√£o de Portarias por n√∫mero de p√°gina
+- Formata√ß√£o inteligente do protocolo e da comunica√ß√£o interna 
+- Visualiza√ß√£o r√°pida das folhas pretas
 - Comandos de atalhos do teclado para agilizar o trabalho
+- Op√ß√£o de ver o texto extra√≠do
 
-# Auto detecÁ„o
-A auto detecÁ„o È realizada a partir do segundo documento, pois para que o Regex encontre a data, protocolo e tipo do documento È realizado uma extraÁ„o do texto da primeira p·gina de cada documento. Para realizar uma auto detec„o r·pida, foi utilizado thread para que extraia o texto e detecte em segundo plano, assim quando o usu·rio clicar em organizar, os dados j· estar„o prontos para serem inseridos nos campos correspondentes.
+# Auto detec√ß√£o
+A auto detec√ß√£o √© realizada a partir do segundo documento, pois para que o Regex encontre a data, protocolo e tipo do documento √© realizado uma extra√ß√£o do texto da primeira p√°gina de cada documento. Para realizar uma auto detec√£o r√°pida, foi utilizado thread para que extraia o texto e detecte em segundo plano, assim quando o usu√°rio clicar em organizar, os dados j√° estar√£o prontos para serem inseridos nos campos correspondentes.
