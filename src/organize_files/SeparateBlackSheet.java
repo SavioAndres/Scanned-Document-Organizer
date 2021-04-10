@@ -61,7 +61,6 @@ public class SeparateBlackSheet {
 
 			ArrayList<File> selectedFiles = new ArrayList<File>();
 			BufferedImage img = null;
-			Timestamp timestamp;
 			int isBlack;
 
 			int size = files.length;
@@ -73,17 +72,7 @@ public class SeparateBlackSheet {
 					if (isBlack == 0) {
 						selectedFiles.add(files[i]);
 					} else if (isBlack == 1) {
-						try {
-							timestamp = new Timestamp(System.currentTimeMillis());
-
-							Files.move(Paths.get(directory.getAbsolutePath() + "\\" + files[i].getName()),
-									Paths.get(newDirectory.getAbsolutePath() + "\\" + timestamp.getTime() + i + "."
-											+ files[i].getName().substring(files[i].getName().lastIndexOf(".") + 1)));
-
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						moveWhitePage(files[i], i, newDirectory);
 					} else {
 						selectedFiles.add(files[i]);
 						selectedFiles.add(files[i + 1]);
@@ -96,6 +85,19 @@ public class SeparateBlackSheet {
 		}
 
 		return null;
+	}
+	
+	public static void moveWhitePage(File file, int num, File newDirectory) {
+		try {
+			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+			Files.move(Paths.get(MainScreenController.directory.getAbsolutePath() + "\\" + file.getName()),
+					Paths.get(newDirectory.getAbsolutePath() + "\\" + timestamp.getTime() + num + "."
+							+ file.getName().substring(file.getName().lastIndexOf(".") + 1)));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static int isBlackPage(BufferedImage img) {

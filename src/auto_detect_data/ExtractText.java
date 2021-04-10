@@ -24,7 +24,6 @@ public class ExtractText {
 		try {
 			instance.setDatapath(new File(".").getCanonicalPath() + "/tessdata");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		instance.setLanguage("por");

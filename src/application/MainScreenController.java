@@ -88,6 +88,8 @@ public class MainScreenController implements Initializable {
 	@FXML
 	private Button btn_organize;
 	@FXML
+	private Button btn_isWhite;
+	@FXML
 	private Slider slider_zoom;
 	@FXML
 	private ComboBox<String> cb_typeDoc;
@@ -104,6 +106,7 @@ public class MainScreenController implements Initializable {
 		btn_previousImage.setDisable(true);
 		btn_lastPage.setDisable(true);
 		btn_nextImage.setDisable(true);
+		btn_isWhite.setDisable(true);
 		tf_protocoloEdoc.setText("");
 		cb_typeDoc.getItems().setAll(DocumentType.types());
 	}
@@ -164,6 +167,7 @@ public class MainScreenController implements Initializable {
 				btn_previousImage.setDisable(true);
 				btn_lastPage.setDisable(false);
 				btn_nextImage.setDisable(false);
+				btn_isWhite.setDisable(false);
 
 				dp_date.requestFocus();
 				lb_totalPages.setText(fileImages.size() + "");
@@ -188,6 +192,7 @@ public class MainScreenController implements Initializable {
 				btn_previousImage.setDisable(true);
 				btn_lastPage.setDisable(true);
 				btn_nextImage.setDisable(true);
+				btn_isWhite.setDisable(true);
 
 				lb_totalPages.setText("...");
 				hl_folderName.setText("...");
@@ -299,6 +304,19 @@ public class MainScreenController implements Initializable {
 			}
 		});
 	}
+	
+	@FXML
+	private void rotateImage(ActionEvent event){
+		image_view.setRotate(image_view.getRotate() + 90); 
+	}
+	
+	@FXML
+	private void whitePage(ActionEvent event) throws FileNotFoundException, IOException {
+		SeparateBlackSheet.moveWhitePage(fileImages.get(indexImage), 0, new File(directory.getAbsolutePath() + "\\brancas"));
+		fileImages.remove(indexImage);
+		nextImage(event);
+		lb_totalPages.setText(fileImages.size() + "");
+	}
 
 	@FXML
 	private void linkFolderName(ActionEvent event) {
@@ -355,6 +373,17 @@ public class MainScreenController implements Initializable {
 	private void openSourceCode(ActionEvent event) throws MalformedURLException, IOException, URISyntaxException {
 		String URL = "https://github.com/SavioAndres/Scanned-Document-Organizer";
 		Desktop.getDesktop().browse(new URL(URL).toURI());
+	}
+	
+	@FXML
+	private void about(ActionEvent event) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Sobre");
+		alert.setHeaderText("Scanned Document Organizer v0.1.6");
+		alert.setContentText("Software desenvolvido para facilitar a separação e "
+				+ "organização dos documentos pessoais dos funcionários da "
+				+ "Secretaria de Estado da Fazendo de Sergipe");
+		alert.showAndWait();
 	}
 
 	@FXML

@@ -7,7 +7,9 @@ import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 import application.MainScreenController;
+import javafx.scene.control.ChoiceDialog;
 import structure.Format;
 
 public class MoveFile {
@@ -28,11 +30,6 @@ public class MoveFile {
 
 		for (int i = 0; i < fileImages.size(); i++) {
 			file = fileImages.get(i);
-			
-			String port = "";
-			if (portariaPages != null)
-				if (portariaPages.contains(i + 1))
-					port = "Portaria ";
 
 			try {
 				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -48,17 +45,40 @@ public class MoveFile {
 					fileNewName = timestamp.getTime() + i + fileExtension;
 				} else {
 					newDirectory = newDirectoryFolder;
-					fileNewName = port + fileName + timestamp.getTime() + i + fileExtension;
+					fileNewName = fileNewNamePortaria(fileName, i + 1, file) + timestamp.getTime() + i + fileExtension;
 				}
 				
 				Files.move(Paths.get(directory.getAbsolutePath() + "\\" + file.getName()),
 						Paths.get(newDirectory.getAbsolutePath() + "\\" + fileNewName));
 				
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private String fileNewNamePortaria(String fileNewName, int num, File file) {
+		if (portariaPages != null)
+			if (portariaPages.contains(num))
+				fileNewName = adialog(file, num) + " ";
+		return fileNewName;
+	}
+	
+	private String adialog(File file, int num) {
+		DocumentType.subTypes("Portaria");
+		String[] choices = DocumentType.itens;
+
+		ChoiceDialog<String> dialog = new ChoiceDialog<>("", choices);
+		dialog.setTitle("Tipo de Portaria");
+		dialog.setHeaderText("Que portaria é a página " + num + "?\nImagem: " + file.getName());
+		dialog.setContentText("Portaria");
+
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+		    return "Portaria " + result.get();
+		}
+		
+		return "Portaria";
 	}
 
 	public void setData(LocalDate date, String protocoloEdoc, String comuInt, String docType, String portariaPage) {

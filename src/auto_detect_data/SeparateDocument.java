@@ -63,7 +63,6 @@ public class SeparateDocument {
 									extractText.readImage(files[i + 2]));
 							i++;
 						} catch (TesseractException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -71,7 +70,6 @@ public class SeparateDocument {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
