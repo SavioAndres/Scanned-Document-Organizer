@@ -3,6 +3,7 @@ package auto_detect_data;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
@@ -36,6 +37,8 @@ public class ExtractText {
 	}
 
 	private DocumentInformation dataExtracted(String text) {
+		text = Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+		
 		String cleanText = text.toLowerCase().replace("\n", " ");
 
 		DocumentInformation docInfo = new DocumentInformation();
@@ -69,7 +72,7 @@ public class ExtractText {
 	}
 
 	private String getDateText(String text) {
-		String[] months = new String[] { "janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto",
+		String[] months = new String[] { "janeiro", "fevereiro", "marco", "abril", "maio", "junho", "julho", "agosto",
 				"setembro", "outubro", "novembro", "dezembro" };
 
 		String regex = "";
