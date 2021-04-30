@@ -1,5 +1,6 @@
 package main;
 
+import application.MainScreenController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -16,7 +17,7 @@ public class Main extends Application {
 		try {
 			stage = primaryStage;
 
-			Pane root = FXMLLoader.load(getClass().getResource("/application/MainScreen.fxml")); // /src/application/MainScreen.fxml
+			Pane root = FXMLLoader.load(MainScreenController.class.getResource("MainScreen.fxml"));
 			Scene scene = new Scene(root);
 
 			primaryStage.setTitle("Organizador de documentos digitalizados");

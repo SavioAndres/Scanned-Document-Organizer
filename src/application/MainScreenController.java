@@ -18,7 +18,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -30,9 +32,11 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.Pane;
 import main.Main;
 import organize_files.DocumentType;
 import organize_files.MoveFile;
@@ -419,6 +423,17 @@ public class MainScreenController implements Initializable {
 			zoomValue = zoomValue - 30;
 			slider_zoom.setValue(zoomValue);
 		}
+	}
+	
+	@FXML
+	private void convertPDFtoJPG(ActionEvent event) throws IOException {
+		Pane root = FXMLLoader.load(ConvertScreenController.class.getResource("ConvertScreen.fxml"));
+		Scene scene = new Scene(root);
+		
+		Main.stage.setTitle("Organizador de documentos digitalizados");
+		Main.stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon.png")));
+		Main.stage.setScene(scene);
+		Main.stage.show();
 	}
 
 	/**
