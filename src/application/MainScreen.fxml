@@ -102,7 +102,10 @@
 				</Menu>
             <Menu mnemonicParsing="false" text="Converter">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#convertPDFtoJPG" text="PDF para JPG" />
+                <MenuItem mnemonicParsing="false" onAction="#convertPDFtoJPG" text="PDF para JPG">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
               </items>
             </Menu>
 				<Menu mnemonicParsing="false" text="Ajuda">

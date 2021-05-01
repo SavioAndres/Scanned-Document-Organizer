@@ -32,7 +32,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
@@ -427,11 +426,8 @@ public class MainScreenController implements Initializable {
 	
 	@FXML
 	private void convertPDFtoJPG(ActionEvent event) throws IOException {
-		Pane root = FXMLLoader.load(ConvertScreenController.class.getResource("ConvertScreen.fxml"));
+		Pane root = FXMLLoader.load(getClass().getResource("/application/ConvertScreen.fxml")); // /src/application/ConvertScreen.fxml
 		Scene scene = new Scene(root);
-		
-		Main.stage.setTitle("Organizador de documentos digitalizados");
-		Main.stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icon.png")));
 		Main.stage.setScene(scene);
 		Main.stage.show();
 	}
