@@ -1,6 +1,9 @@
 package application;
 
 import java.awt.Desktop;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
 import auto_detect_data.BackgroundSystem;
 import auto_detect_data.DocumentInformation;
 import javafx.application.Platform;
@@ -91,6 +95,8 @@ public class MainScreenController implements Initializable {
 	@FXML
 	private Button btn_organize;
 	@FXML
+	private Button btn_rotate;
+	@FXML
 	private Button btn_isWhite;
 	@FXML
 	private Slider slider_zoom;
@@ -110,6 +116,7 @@ public class MainScreenController implements Initializable {
 		btn_lastPage.setDisable(true);
 		btn_nextImage.setDisable(true);
 		btn_isWhite.setDisable(true);
+		btn_rotate.setDisable(true);
 		tf_protocoloEdoc.setText("");
 		cb_typeDoc.getItems().setAll(DocumentType.types());
 	}
@@ -171,6 +178,7 @@ public class MainScreenController implements Initializable {
 				btn_lastPage.setDisable(false);
 				btn_nextImage.setDisable(false);
 				btn_isWhite.setDisable(false);
+				btn_rotate.setDisable(false);
 
 				dp_date.requestFocus();
 				lb_totalPages.setText(fileImages.size() + "");
@@ -196,6 +204,7 @@ public class MainScreenController implements Initializable {
 				btn_lastPage.setDisable(true);
 				btn_nextImage.setDisable(true);
 				btn_isWhite.setDisable(true);
+				btn_rotate.setDisable(true);
 
 				lb_totalPages.setText("...");
 				hl_folderName.setText("...");
@@ -309,8 +318,22 @@ public class MainScreenController implements Initializable {
 	}
 	
 	@FXML
-	private void rotateImage(ActionEvent event){
-		image_view.setRotate(image_view.getRotate() + 90); 
+	private void rotatePage(ActionEvent event) throws IOException {
+	    File imageFile = fileImages.get(indexImage);
+	    
+		BufferedImage source = ImageIO.read(imageFile);
+        BufferedImage output = new BufferedImage(source.getHeight(), source.getWidth(), source.getType());
+            
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.PI/2, source.getWidth()/2, source.getHeight()/2);
+        double offset = (source.getWidth()-source.getHeight())/2;
+        transform.translate(offset, offset);
+        AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+        op.filter(source, output);
+ 
+        ImageIO.write(output, "jpg", imageFile);
+
+        image_view.setImage(OpenDirectory.image(fileImages.get(indexImage)));
 	}
 	
 	@FXML
@@ -382,7 +405,7 @@ public class MainScreenController implements Initializable {
 	private void about(ActionEvent event) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Sobre");
-		alert.setHeaderText("Scanned Document Organizer v0.1.6");
+		alert.setHeaderText("Scanned Document Organizer v0.2.0");
 		alert.setContentText("Software desenvolvido para facilitar a separação e "
 				+ "organização dos documentos pessoais dos funcionários da "
 				+ "Secretaria de Estado da Fazendo de Sergipe");

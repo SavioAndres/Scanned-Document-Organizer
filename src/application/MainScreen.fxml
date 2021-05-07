@@ -133,6 +133,7 @@
 								<Button fx:id="btn_lastPage" layoutX="400.0" layoutY="17.0" mnemonicParsing="false" onAction="#lastPage" prefHeight="25.0" prefWidth="60.0" text="Última" AnchorPane.bottomAnchor="16.0" />
 								<Slider fx:id="slider_zoom" layoutX="22.0" layoutY="35.0" prefHeight="14.0" prefWidth="192.0" AnchorPane.bottomAnchor="9.0" />
                         <Button fx:id="btn_isWhite" layoutX="586.0" layoutY="17.0" mnemonicParsing="false" onAction="#whitePage" text="Branca" />
+                        <Button fx:id="btn_rotate" layoutX="539.0" layoutY="17.0" mnemonicParsing="false" onAction="#rotatePage" prefHeight="25.0" prefWidth="31.0" text="⭮" />
 							</children>
 						</AnchorPane>
 					</children>
