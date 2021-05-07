@@ -8,7 +8,7 @@ public class DocumentType {
 
 	public static String[] types() {
 		String[] type = new String[] { "Outros", "Ferias", "Concessao", "Licenca", "Portaria", "Gozo de Licenca-Premio",
-				"Majoracao de Licenca-Premio", "Averbacao de Tempo de Servico", "Progressao por Titulacao", "Abono",
+				"Majoracao de Licenca-Premio", "Averbacao de Tempo de Servico", "Atestado Medico", "Progressao por Titulacao", "Abono",
 				"Incorporacao de Funcao", "Checklist de Documentos", "Comissao de Julgamento de 1ª Instancia", "Afastamento", "Indenizacao",
 				"Aposentadoria", "Diarias" };
 		return type;
