@@ -36,6 +36,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
@@ -394,6 +395,18 @@ public class MainScreenController implements Initializable {
 			System.out.println("nonon");
 		}
 	}
+	
+	@FXML
+	private void openTypesDocuments(ActionEvent event) {
+		Image image = new Image(getClass().getResourceAsStream("/images/alteracoes_tipos_docs.png"));
+		ImageView imageView = new ImageView(image);
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setResizable(true);
+		alert.setTitle("Alterações nos Tipos de Documentos");
+		alert.setHeaderText("");
+		alert.setGraphic(imageView);
+		alert.showAndWait();
+	}
 
 	@FXML
 	private void openSourceCode(ActionEvent event) throws MalformedURLException, IOException, URISyntaxException {
@@ -405,7 +418,7 @@ public class MainScreenController implements Initializable {
 	private void about(ActionEvent event) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Sobre");
-		alert.setHeaderText("Scanned Document Organizer v0.2.0");
+		alert.setHeaderText("Scanned Document Organizer v1.2.0");
 		alert.setContentText("Software desenvolvido para facilitar a separação e "
 				+ "organização dos documentos pessoais dos funcionários da "
 				+ "Secretaria de Estado da Fazendo de Sergipe");

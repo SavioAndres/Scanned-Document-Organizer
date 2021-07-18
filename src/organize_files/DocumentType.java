@@ -7,42 +7,23 @@ public class DocumentType {
 	public static boolean subTypeDisable;
 
 	public static String[] types() {
-		String[] type = new String[] { "Outros", "Ferias", "Concessao", "Licenca", "Portaria", "Gozo de Licenca-Premio",
+		String[] type = new String[] { "Outros", "Ferias", "Oficio", "Concessao", "Licenca", "Portaria", "Gozo de Licenca-Premio",
 				"Majoracao de Licenca-Premio", "Averbacao de Tempo de Servico", "Atestado Medico", "Progressao por Titulacao", "Abono",
 				"Incorporacao de Funcao", "Checklist de Documentos", "Comissao de Julgamento de 1ª Instancia", "Afastamento", "Indenizacao",
-				"Aposentadoria", "Diarias" };
+				"Aposentadoria" };
 		return type;
 	}
 
 	public static void subTypes(String typeDoc) {
 		subTypeDisable = false;
 		switch (typeDoc) {
-		case "Abono":
-			valueType = "de Permanencia";
-			itens = new String[] { "de Faltas", "de Permanencia" };
-			break;
-		case "Afastamento":
-			valueType = "do Cargo";
-			itens = new String[] { "do Cargo", "para Concorrer ao Pleito Eleitoral", "para Mandato Sindical",
-					"sem Justificativa" };
-			break;
-		case "Aposentadoria":
-			valueType = "";
-			itens = new String[] { "", "por Invalidez" };
-			break;
 		case "Concessao":
 			valueType = "de Licenca-Premio";
 			itens = new String[] { "de Finate", "de Licenca-Premio" };
 			break;
-		case "Indenizacao":
-			valueType = "de Licenca-Premio";
-			itens = new String[] { "de Licenca-Premio", "de Ferias e 13 Salario", "Outras" };
-			break;
 		case "Licenca":
 			valueType = "Medica";
-			itens = new String[] { "Adocao", "para Acompanhamento do Conjuge", "Medica",
-					"para Acompanhar pessoa da famila", "para Exercicio de Mandato Eletivo",
-					"para Trato de Interesse Particular", "Paternidade" };
+			itens = new String[] { "Medica", "Outras" };
 			break;
 		case "Portaria":
 			valueType = "Concessao de Licenca-Premio";

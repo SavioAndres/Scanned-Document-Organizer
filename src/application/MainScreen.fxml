@@ -110,6 +110,7 @@
             </Menu>
 				<Menu mnemonicParsing="false" text="Ajuda">
 					<items>
+                  <MenuItem mnemonicParsing="false" onAction="#openTypesDocuments" text="Tipos de documentos" />
 						<MenuItem mnemonicParsing="false" onAction="#openSourceCode" text="Código Fonte" />
 						<MenuItem mnemonicParsing="false" onAction="#about" text="Sobre" />
 					</items>
