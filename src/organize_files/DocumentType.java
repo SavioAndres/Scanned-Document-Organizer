@@ -10,7 +10,7 @@ public class DocumentType {
 		String[] type = new String[] { "Outros", "Ferias", "Oficio", "Concessao", "Licenca", "Portaria", "Gozo de Licenca-Premio",
 				"Majoracao de Licenca-Premio", "Averbacao de Tempo de Servico", "Atestado Medico", "Progressao por Titulacao", "Abono",
 				"Incorporacao de Funcao", "Checklist de Documentos", "Comissao de Julgamento de 1ª Instancia", "Afastamento", "Indenizacao",
-				"Aposentadoria" };
+				"Aposentadoria", "Decreto", "Periculosidade" };
 		return type;
 	}
 
